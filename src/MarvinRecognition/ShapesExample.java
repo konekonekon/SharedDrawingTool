@@ -24,6 +24,8 @@ public class ShapesExample {
         // segment each object
         MarvinSegment[] objs = floodfillSegmentation(image);
         MarvinSegment seg;
+        //System.out.println(objs.length);
+        // to recognize color and delete white form
 
         // For each object...
         // Skip position 0 which is just the background
