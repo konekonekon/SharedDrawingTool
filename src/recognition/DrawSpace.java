@@ -11,7 +11,7 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 
 	private ArrayList<Point> currentLine;
 	private ArrayList<ArrayList<Point>> lines;
-
+	//private ArrayList<ArrayList<Point>> shapes;
 
 	public DrawSpace() {
 		super();
@@ -36,35 +36,63 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 
 		for (ArrayList<Point> line : lines)
 			this.drawStroke(line, g2);
-		
-		/*for (ArrayList<Point> line : lines)
-			this.findAngle(line);*/
 	}
 
-	public void drawStroke(ArrayList<Point> line, Graphics2D g2) {
+	/*public void displayShapes(ArrayList<ArrayList<Point>> shapesToDisplay){
 		int i = 0;
-		while (i < line.size() - 1) {
-			Point p0 = line.get(i);
-			Point p1 = line.get(i + 1);
-			g2.drawLine(p0.x, p0.y, p1.x, p1.y);			
-			i++;
+		for (ArrayList<Point> aShape : shapesToDisplay){
+			 System.out.println("figure " + i + " : " + getShapeName(aShape.size()));
 		}
 	}
+	*/
+	public String getShapeName(int corners){
+        switch(corners){
+        	case 0: return "Circle";
+        	case 1: return "1 angle";
+        	case 2: return "2 angles";
+            case 3: return "Triangle";
+            case 4: return "Rectangle";
+            case 5: return "Pentagon";
+            case 6: return "Hexagon";
+            case 7: return "Heptagon";
+            case 8: return "Octagon";
+            default: return "I can't recognize this shape!";
+        }
+    }
 	
 	public ArrayList<Point> recognizeShape(ArrayList<Point> line){
-		Point previous;
-		Point anchor;
-		ArrayList<Point> shape;
+		Point previous = null;
+		Point anchor = null;
+		ArrayList<Point> shape = new ArrayList<Point>();
 		
 		for (Point current : line){
+			if (anchor == null) {
+				anchor = current;
+				shape.add(anchor);
+				continue;
+			}
 			
-			double angle = calculAngle(current);
-			if (angle > 10){
-				anchor = previous;
+			if (previous == null) {
+				previous = current;
+				continue;
+			}
+			
+			if (previous.equals(current))
+				continue;
+			
+			double angle = calculateAngle(anchor, previous, current);
+			
+			if (angle > 20){
+				if (current.distance(previous) > 20) {
+					anchor = previous;
+					shape.add(anchor);
+					previous = current;
+				}
+			} else {
+				previous = current;
 			}
 		}
-		
-		return null;
+		return shape;
 	}
 	
 	public double calculateAngle(Point p0, Point p1, Point p2){
@@ -73,21 +101,31 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 		 * 
 		 *   vectorU = p0 to p1 = u, vectorV = p0 to p2 = v
 		 *   length(vectorU) = lengthU, length(vectorV) = lengthV ***/
-		
-		
+
 		Point u = new Point((p1.x - p0.x), (p1.y - p0.y));
-		Point v = new Point((p2.x - p0.x), (p2.y - p0.y));
+		Point v = new Point((p2.x - p1.x), (p2.y - p1.y));
 		double dotProduct = (u.x * v.x) + (u.y * v.y);
 		double lengthU = p0.distance(p1);
-		double lengthV = p0.distance(p2);
+		double lengthV = p1.distance(p2);
 		double length = lengthU * lengthV;
 		
 		double cosDelta = dotProduct / length;
 		System.out.println("cosDelta : " + cosDelta);
 		double delta = Math.acos(cosDelta);
+		delta = delta * 180 / Math.PI;
 		System.out.println("Delta : " + delta);
 		
 		return delta;
+	}
+	
+	public void drawStroke(ArrayList<Point> line, Graphics2D g2) {
+		int i = 0;
+		while (i < line.size() - 1) {
+			Point p0 = line.get(i);
+			Point p1 = line.get(i + 1);
+			g2.drawLine(p0.x, p0.y, p1.x, p1.y);			
+			i++;
+		}
 	}
 
 	public void mouseClicked(MouseEvent e) {}
@@ -99,7 +137,10 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 		repaint();
 	}
 
-	public void mouseReleased(MouseEvent e) {}
+	public void mouseReleased(MouseEvent e) {
+		ArrayList<Point> aShape = recognizeShape(currentLine);
+		System.out.println("This figure is " + getShapeName(aShape.size()));
+	}
 
 	public void mouseDragged(MouseEvent e) {
 		currentLine.add(e.getPoint());
