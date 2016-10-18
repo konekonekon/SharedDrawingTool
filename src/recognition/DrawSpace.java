@@ -37,8 +37,8 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 		for (ArrayList<Point> line : lines)
 			this.drawStroke(line, g2);
 		
-		for (ArrayList<Point> line : lines)
-			this.findAngle(line);
+		/*for (ArrayList<Point> line : lines)
+			this.findAngle(line);*/
 	}
 
 	public void drawStroke(ArrayList<Point> line, Graphics2D g2) {
@@ -51,18 +51,20 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 		}
 	}
 	
-	public void findAngle(ArrayList<Point> line){
-		int i = 0;
-		while (i < line.size() - 1) {
-			Point p0 = line.get(i);
-			Point p1 = line.get(i + 1);
-			Point p2 = line.get(i + 2);
+	public ArrayList<Point> recognizeShape(ArrayList<Point> line){
+		Point previous;
+		Point anchor;
+		ArrayList<Point> shape;
+		
+		for (Point current : line){
 			
-			/* 0° < angle < 180° */
-			double angle = calculateAngle(p0,p1,p2);
-			
-			i++;
+			double angle = calculAngle(current);
+			if (angle > 10){
+				anchor = previous;
+			}
 		}
+		
+		return null;
 	}
 	
 	public double calculateAngle(Point p0, Point p1, Point p2){
@@ -71,6 +73,8 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 		 * 
 		 *   vectorU = p0 to p1 = u, vectorV = p0 to p2 = v
 		 *   length(vectorU) = lengthU, length(vectorV) = lengthV ***/
+		
+		
 		Point u = new Point((p1.x - p0.x), (p1.y - p0.y));
 		Point v = new Point((p2.x - p0.x), (p2.y - p0.y));
 		double dotProduct = (u.x * v.x) + (u.y * v.y);
