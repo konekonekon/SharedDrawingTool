@@ -33,39 +33,7 @@ public class Window extends JFrame{
 		this.setVisible(true);
 	}
 	
-	/*public double calculateAngle(Point p0, Point p1, Point p2){
-		*//*** cos Delta = vectorU*vectorV / length(vectorU)*length(vectorV) 
-		 *   dotProcudt = vectorU*vectorV.
-		 * 	 Delta = acos Delta. acos = inverse of cos = cos small(-1)
-		 * 
-		 *   vectorU = p0 to p1 = u, vectorV = p0 to p2 = v
-		 *   length(vectorU) = lengthU, length(vectorV) = lengthV ***//*
-
-		Point u = new Point((p1.x - p0.x), (p1.y - p0.y));
-		Point v = new Point((p2.x - p1.x), (p2.y - p1.y));
-		double dotProduct = (u.x * v.x) + (u.y * v.y);
-		System.out.println("DotProduct : " + dotProduct);
-		double lengthU = p0.distance(p1);
-		double lengthV = p1.distance(p2);
-		double length = lengthU * lengthV;
-		System.out.println("Length : " + length);
-		
-		double cosDelta = dotProduct / length;
-		System.out.println("cosDelta : " + cosDelta);
-		double delta = Math.acos(cosDelta);
-		delta = delta * 180 / Math.PI;
-		System.out.println("Delta : " + delta);
-		
-		return delta;
-	}*/
-	
 	public static void main(String[] args) {
 		Window w = new Window();
-		
-		/*Point p0 = new Point(0,0);
-		Point p1 = new Point(0,0);
-		Point p2 = new Point(0,1);
-		System.out.println(w.calculateAngle(p0, p1, p2));*/
-
 	}
 }
