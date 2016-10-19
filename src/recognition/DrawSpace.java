@@ -43,29 +43,49 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 			for (Point p : aShape) {
 				this.drawAnchor(p, g2);
 			}
-			if (reshapeDemande == true)
-				this.displayShape(aShape, g2);
+			//remove line that user drew
+			this.displayShape(aShape, g2);
+			/*if (reshapeDemande == true)
+				this.displayShape(aShape, g2);*/
 		}
 	}
 
 	public void displayShape(ArrayList<Point> shapeToDisplay, Graphics2D g2){
-		int numAngle = shapeToDisplay.size();
+		g2.setColor(Color.RED);
+		g2.setStroke(new BasicStroke(3));
 		Point startPoint = shapeToDisplay.get(0);
-		//Point secondPoint = shapeToDisplay.get(1);
-		int distanceToSecond = (int)(startPoint.distance(shapeToDisplay.get(numAngle-1)));
-		
-	
-		//drawline
+		Point previous = null;
+		for (Point p : shapeToDisplay){
+			
+			if (previous == null){
+				previous = p;
+				continue;
+			}
+			
+			if (p.distance(startPoint) < 10)
+				g2.drawLine(previous.x, previous.y, startPoint.x, startPoint.y);
+			else
+				g2.drawLine(p.x, p.y, previous.x, previous.y);
+			previous = p;
+		}
 	}
-	
 	
 	public void drawAnchor(Point p, Graphics2D g2){
 		g2.setColor(Color.RED);
 		g2.fillOval(p.x, p.y, 5, 5);
 	}
 	
-	public String getShapeName(int corners){
-        switch(corners){ //difference between Line and Point, circle and others (contain angle<90)
+/*	public boolean isCircle(){
+		for (Integer anAngle : aShape.angles){
+			if (anAngle < 90)
+				return true;
+		}
+		return false;
+	}*/
+	
+	public String getShapeName(int numAngle){
+		
+        switch(numAngle){
         	case 1: return "Line";
         	case 2: return "1 angle";
             case 3: return "Triangle";
@@ -74,18 +94,26 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
             case 6: return "Hexagon";
             case 7: return "Heptagon";
             case 8: return "Octagon";
-            default: return "Circle";
+            /*default: if (this.isCircle() == true)
+            			return "Circle";
+            		else
+            			return "Unknown";*/
         }
+        return null;
     }
 	
 	public ArrayList<Point> recognizeShape(ArrayList<Point> line){
 		Point previous = null;
 		Point anchor = null;
+		//ArrayList<Point> shapePoints = new ArrayList<Point>();
+		//Shape shapeElements = new Shape(null,null);
 		ArrayList<Point> shape = new ArrayList<Point>();
 		
 		for (Point current : line){
 			if (anchor == null) {
 				anchor = current;
+				//shapeElements.points.add(anchor);
+				//shapeElements = new Shape(anchor, new Integer(null));
 				shape.add(anchor);
 				continue;
 			}
@@ -102,15 +130,31 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 			
 			if (angle > 30){
 				if (current.distance(anchor)> 25){
-					if (current.distance(previous) > 20) {
+					if (current.distance(previous) > 10) {
 						anchor = previous;
 						shape.add(anchor);
+						/*shapeElements.points.add(anchor);
+						Integer i = new Integer((int)angle);
+						shapeElements.angles.add(i);*/					
 						previous = current;
 					}
 				}
 			} else {
 				previous = current;
 			}
+			
+			if (current == line.get(line.size()-1)){
+				anchor = current;
+				shape.add(anchor);
+			}
+		}
+		/* Compare distance between start point and end point.
+		 * if the distance is small, ignore end point, consider end point equal to start point.
+		 */ 
+		Point start = shape.get(0);
+		Point end = shape.get(shape.size()-1);
+		if (start.distance(end) < 5){
+			end = start;
 		}
 		return shape;
 	}
@@ -149,12 +193,12 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 	}
 
 	public void mouseClicked(MouseEvent e) {
-		if (e.getClickCount() == 2){
+		/*if (e.getClickCount() == 2){
 			currentLine = null;
 			//if (e.getLocationOnScreen())
 			reshapeDemande = true;
 			repaint();
-		}
+		}*/
 
 	}
 
@@ -167,7 +211,7 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 
 	public void mouseReleased(MouseEvent e) {
 		aShape = recognizeShape(currentLine);
-		System.out.println("This figure is " + getShapeName(aShape.size()));
+		System.out.println("This figure is " + getShapeName(aShape.size()-1));
 		repaint();
 	}
 
