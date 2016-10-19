@@ -4,20 +4,21 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
 import java.util.*;
-
 import javax.swing.*;
 
 public class DrawSpace extends JComponent implements MouseListener, MouseMotionListener {
 
 	private ArrayList<Point> currentLine;
 	private ArrayList<ArrayList<Point>> lines;
-	//private ArrayList<ArrayList<Point>> shapes;
+	private ArrayList<Point> aShape;
+	private boolean reshapeDemande;
 
 	public DrawSpace() {
 		super();
 		addMouseListener(this);
 		addMouseMotionListener(this);
 		lines = new ArrayList<ArrayList<Point>>();
+		reshapeDemande = false;
 	}
 
 	// TODO : color, thickness for line/text
@@ -34,29 +35,46 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 		g2.fillRect(0, 0, getWidth(), getHeight());
 		g2.setColor(Color.black);
 
-		for (ArrayList<Point> line : lines)
+		for (ArrayList<Point> line : lines){
 			this.drawStroke(line, g2);
-	}
-
-	/*public void displayShapes(ArrayList<ArrayList<Point>> shapesToDisplay){
-		int i = 0;
-		for (ArrayList<Point> aShape : shapesToDisplay){
-			 System.out.println("figure " + i + " : " + getShapeName(aShape.size()));
+		}
+		
+		if (aShape != null) {
+			for (Point p : aShape) {
+				this.drawAnchor(p, g2);
+			}
+			if (reshapeDemande == true)
+				this.displayShape(aShape, g2);
 		}
 	}
-	*/
+
+	public void displayShape(ArrayList<Point> shapeToDisplay, Graphics2D g2){
+		int numAngle = shapeToDisplay.size();
+		Point startPoint = shapeToDisplay.get(0);
+		//Point secondPoint = shapeToDisplay.get(1);
+		int distanceToSecond = (int)(startPoint.distance(shapeToDisplay.get(numAngle-1)));
+		
+	
+		//drawline
+	}
+	
+	
+	public void drawAnchor(Point p, Graphics2D g2){
+		g2.setColor(Color.RED);
+		g2.fillOval(p.x, p.y, 5, 5);
+	}
+	
 	public String getShapeName(int corners){
-        switch(corners){
-        	case 0: return "Circle";
-        	case 1: return "1 angle";
-        	case 2: return "2 angles";
+        switch(corners){ //difference between Line and Point, circle and others (contain angle<90)
+        	case 1: return "Line";
+        	case 2: return "1 angle";
             case 3: return "Triangle";
             case 4: return "Rectangle";
             case 5: return "Pentagon";
             case 6: return "Hexagon";
             case 7: return "Heptagon";
             case 8: return "Octagon";
-            default: return "I can't recognize this shape!";
+            default: return "Circle";
         }
     }
 	
@@ -82,11 +100,13 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 			
 			double angle = calculateAngle(anchor, previous, current);
 			
-			if (angle > 20){
-				if (current.distance(previous) > 20) {
-					anchor = previous;
-					shape.add(anchor);
-					previous = current;
+			if (angle > 30){
+				if (current.distance(anchor)> 25){
+					if (current.distance(previous) > 20) {
+						anchor = previous;
+						shape.add(anchor);
+						previous = current;
+					}
 				}
 			} else {
 				previous = current;
@@ -128,7 +148,15 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 		}
 	}
 
-	public void mouseClicked(MouseEvent e) {}
+	public void mouseClicked(MouseEvent e) {
+		if (e.getClickCount() == 2){
+			currentLine = null;
+			//if (e.getLocationOnScreen())
+			reshapeDemande = true;
+			repaint();
+		}
+
+	}
 
 	public void mousePressed(MouseEvent e) {
 		currentLine = new ArrayList<Point>();
@@ -138,8 +166,9 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 	}
 
 	public void mouseReleased(MouseEvent e) {
-		ArrayList<Point> aShape = recognizeShape(currentLine);
+		aShape = recognizeShape(currentLine);
 		System.out.println("This figure is " + getShapeName(aShape.size()));
+		repaint();
 	}
 
 	public void mouseDragged(MouseEvent e) {
@@ -152,8 +181,5 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 	public void mouseExited(MouseEvent e) {}
 
 	public void mouseMoved(MouseEvent e) {}
-
-	
-	
 
 }
