@@ -36,6 +36,7 @@ public class DrawPC extends JFrame {
 		// Menu
 		menu = new Menu();
 		this.add(menu);
+		this.setJMenuBar(menu); // Don't forget !!
 
 		// JPanel for the canvas
 		panel = new JPanel();
@@ -43,7 +44,9 @@ public class DrawPC extends JFrame {
 		this.add(panel);
 
 		// Toolbar
-
+		
+		
+		
 		// Canvas as component
 		canvas = new ArrayList<Canva>();
 		canvasNB = 0;

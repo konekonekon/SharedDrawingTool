@@ -22,14 +22,16 @@ public class Menu extends JMenuBar{
 		canvaMenu = new JMenu("Canvas");
 		
 		// fileMenu items
-		importFile = new JMenuItem();
-		exportFile = new JMenuItem();
-		exitFile = new JMenuItem();
+		importFile = new JMenuItem("Import");
+		exportFile = new JMenuItem("Export");
+		exitFile = new JMenuItem("Exit");
 		
 		fileMenu.add(importFile);
 		importFile.addActionListener(event -> MenuAction.importFile());
 		fileMenu.add(exportFile);
+		exportFile.addActionListener(event -> MenuAction.exportFile());
 		fileMenu.add(exitFile);
+		exitFile.addActionListener(event -> MenuAction.exitFile());
 		
 	}
 	
