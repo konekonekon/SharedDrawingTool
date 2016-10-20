@@ -1,5 +1,6 @@
 package damien;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.KeyEvent;
@@ -25,6 +26,7 @@ public class DrawPC extends JFrame {
 
 	private JPanel panel;
 	private Menu menu;
+	private Toolbar toolbar;
 
 	public DrawPC(){
 		super();
@@ -33,20 +35,26 @@ public class DrawPC extends JFrame {
 		setPreferredSize(prefSize);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
+		this.setLayout(new BorderLayout());
+		
+
 		// Menu
 		menu = new Menu();
 		this.add(menu);
 		this.setJMenuBar(menu); // Don't forget !!
+
+		// Toolbar
+		// toolbar = new Toolbar();
+		// add(toolbar);
+
 
 		// JPanel for the canvas
 		panel = new JPanel();
 		panel.setLayout(new FlowLayout());
 		this.add(panel);
 
-		// Toolbar
-		
-		
-		
+
+
 		// Canvas as component
 		canvas = new ArrayList<Canva>();
 		canvasNB = 0;
