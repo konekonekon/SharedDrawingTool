@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-public class DrawPC extends JFrame implements KeyListener, MouseListener, MouseMotionListener{
+public class DrawPC extends JFrame {
 
 	/*
 	 * Variables and states
@@ -24,6 +24,7 @@ public class DrawPC extends JFrame implements KeyListener, MouseListener, MouseM
 	protected int canvasNB;
 
 	private JPanel panel;
+	private Menu menu;
 
 	public DrawPC(){
 		super();
@@ -31,13 +32,15 @@ public class DrawPC extends JFrame implements KeyListener, MouseListener, MouseM
 		setMinimumSize(minimumSize);
 		setPreferredSize(prefSize);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		// Menu
+		menu = new Menu();
+		this.add(menu);
 
 		// JPanel for the canvas
 		panel = new JPanel();
 		panel.setLayout(new FlowLayout());
 		this.add(panel);
-
-		// Menu
 
 		// Toolbar
 
@@ -92,65 +95,4 @@ public class DrawPC extends JFrame implements KeyListener, MouseListener, MouseM
 		revalidate();
 		repaint();
 	}
-
-	@Override
-	public void mouseDragged(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseMoved(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseClicked(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void keyPressed(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-
-	}
-
 }
