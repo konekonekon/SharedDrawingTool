@@ -10,6 +10,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -44,14 +45,14 @@ public class DrawPC extends JFrame {
 		this.setJMenuBar(menu); // Don't forget !!
 
 		// Toolbar
-		// toolbar = new Toolbar();
-		// add(toolbar);
+		Toolbar();
+		// add(toolbar, BorderLayout.NORTH);
 
 
 		// JPanel for the canvas
 		panel = new JPanel();
 		panel.setLayout(new FlowLayout());
-		this.add(panel);
+		this.add(panel, BorderLayout.CENTER);
 
 
 
@@ -67,6 +68,18 @@ public class DrawPC extends JFrame {
 		// Pack and visibility
 		pack();
 		this.setVisible(true);
+	}
+	
+	protected void Toolbar() {
+		JPanel toolBarPanel = new JPanel();
+		this.add(toolBarPanel, BorderLayout.NORTH);
+		toolBarPanel.setLayout(new FlowLayout());
+		JButton strokes = new JButton("Strokes");
+		toolBarPanel.add(strokes);
+		strokes.addActionListener(event -> ToolBarAction.strokes());
+		JButton color = new JButton("Color");
+		toolBarPanel.add(color);
+		color.addActionListener(event -> ToolBarAction.color());
 	}
 
 	protected void addcanva(){

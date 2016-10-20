@@ -3,13 +3,11 @@ package damien;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 
-public class Toolbar extends JComponent{
+public class Toolbar {
 
 
 	JButton strokes;
 
-	public Toolbar() {
-		strokes = new JButton("Strokes");
-	}
+
 
 }
