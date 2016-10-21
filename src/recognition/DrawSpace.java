@@ -2,8 +2,6 @@ package recognition;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.geom.Ellipse2D;
-import java.awt.image.*;
 import java.util.*;
 import javax.swing.*;
 
@@ -18,7 +16,11 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 	private double smallRayon;
 	private double bigRayon;
 	private boolean isCircle;
-	private ArrayList<ArrayList<Point>> recognizeShapes;
+	private ArrayList<Shape> shapes;
+	private ArrayList<Line> liness;
+	private ArrayList<Dot> dots;
+	private ArrayList<Circle> circles;
+	private ArrayList<Polygon> polygons;
 
 	public DrawSpace() {
 		super();
@@ -26,7 +28,6 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 		addMouseMotionListener(this);
 		lines = new ArrayList<ArrayList<Point>>();
 		isCircle = false;
-		recognizeShapes = new ArrayList<ArrayList<Point>>(); //stock
 	}
 
 	// TODO : color, thickness for line/text
@@ -41,36 +42,40 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 	    
 		g2.setColor(Color.white);
 		g2.fillRect(0, 0, getWidth(), getHeight());
+		
 		g2.setColor(Color.black);
-
 		for (ArrayList<Point> line : lines){
-			this.drawStroke(line, g2);
+			drawStroke(line, g2);
 		}
 		
-		if (this.aShape != null) {
+		/*for (Shape s : shapes)
+			drawShape(s)
+		for (Circle c : circles)
+			drawCircle(c)*/
+		
+		if (aShape != null) {
 			/*for (Point p : aShape) {
-				this.drawAnchor(p, g2);
-			}*/ //which is better?
-			this.drawAnchor(this.aShape, g2);
+				drawAnchor(p, g2);
+			}*/ //this is better!
+			drawAnchor(aShape, g2);
 			
-			if (this.aShape.size() > 2)
-				this.drawTestCircles(this.bounds, g2); //not work
+			/*if (aShape.size() > 2)
+				drawTestCircles(bounds, g2);*/
 			
-			if (this.isCircle == true) {
-				this.displayCircle(this.bounds, g2);
-				this.isCircle = false;
+			if (isCircle == true) {
+				displayCircle(bounds, g2);
+				isCircle = false;
 			}
 			else {
-				this.displayShape(this.aShape, g2);
+				displayShape(aShape, g2);
 			}
-			//this.isCircle = false;
-			this.aShape = null;
+			aShape = null;
 		}
 	}
 	
 	/*** DRAW ELEMENTS SECTION ***/
 	public void displayCircle(Rectangle rectangle, Graphics2D g2d){
-		this.calculateRayon(rectangle);
+		calculateRayon(rectangle);
 		g2d.setColor(Color.RED);
 		g2d.setStroke(new BasicStroke(3));
 		
@@ -81,24 +86,18 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 	}
 	
 	public void drawTestCircles(Rectangle rec, Graphics2D g2d){ //To test
-		this.calculateRayon(rec); //each time call this function?
-		System.out.println("draw Test Circle : ");
-		System.out.println("smallRayon : " + smallRayon);
-		System.out.println("bigRayon : " + bigRayon);
+		calculateRayon(rec); //each time call this function?
 		
 		int leftForSmall = center.x - (int)smallRayon;
 		int topForSmall = center.y - (int)smallRayon;
 		int leftForBig = center.x - (int)bigRayon;
 		int topForBig = center.y - (int)bigRayon;
 
-		g2d.setColor(Color.YELLOW);
+		g2d.setColor(Color.BLUE);
 		g2d.setStroke(new BasicStroke(1));
 		//draw center point
 		g2d.fillOval(center.x-2, center.y-2, 4, 4);
-		//draw rayons
-		/*Ellipse2D.Double shape = new Ellipse2D.Double(0.5, 0.5, 50, 50);
-	    g2d.draw(shape);*/
-	    
+		//draw rayons	    
 		g2d.drawOval(leftForSmall, topForSmall, (int)smallRayon*2, (int)smallRayon*2);
 		g2d.drawOval(leftForBig, topForBig, (int)bigRayon*2, (int)bigRayon*2);
 	}
@@ -135,7 +134,7 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 	}
 	
 	/*** CALCULATE & RECOGNIZE SECTION ***/	
-	public String getShapeName(int numAngle){
+	/*public String getShapeName(int numAngle){
         switch(numAngle){
         	case 0: return "Point";
         	case 1: return "Line";
@@ -148,28 +147,19 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
             case 8: return "Octagon";
             default : return "Unknown";
         }
-    }
+    }*/
 	
 	public void calculateRayon(Rectangle rec){
 		int x = rec.x + (rec.width / 2);
 		int y = rec.y + (rec.height / 2);
 		center = new Point(x,y);
 		rayon = ((rec.width / 2) + (rec.height / 2)) / 2;
-		System.out.println("RAyon : " + rayon);
-		System.out.println("calculate RAyon : ");
 		smallRayon = rayon-(rayon*0.1);
-		System.out.println("smallRayon : " + smallRayon);
-		bigRayon = rayon+(rayon*0.1);
-		System.out.println("bigRayon : " + bigRayon);
-		//global? create new class Circle?
-		
+		bigRayon = rayon+(rayon*0.1);	
 	}
 	
 	public boolean recognizeCircle(Rectangle rec, ArrayList<Point> currentStroke) {
 		this.calculateRayon(rec);
-		System.out.println("recognize Circle : ");
-		System.out.println("smallRayon : " + smallRayon);
-		System.out.println("bigRayon : " + bigRayon);
 		
 		if (currentStroke.size() > 3){
 			for (Point p : currentStroke) {
@@ -196,7 +186,6 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 			right = Math.max(p.x, right);
 			bottom = Math.max(p.y, bottom);
 		}
-		//System.out.println(left + " " + top + " " + right + " " + bottom);
 		Rectangle bounds = new Rectangle(left, top, (right - left), (bottom - top));
 		return bounds;
 	}
@@ -288,23 +277,15 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 	}
 
 	public void mouseReleased(MouseEvent e) {
-		this.aShape = this.recognizeShape(currentLine); //aShape is global, why it needs return? 
-		//System.out.println("Shape has " + aShape.size() + " points.");
+		aShape = recognizeShape(currentLine);
 		
-		if (this.aShape.size() > 2){
-			this.bounds = this.getBounds(this.aShape);
-			//System.out.println("Bounds : " + this.bounds);
+		if (aShape.size() > 2){
+			bounds = getBounds(aShape);
 		
-			if (this.recognizeCircle(this.bounds, currentLine) == true){
-				this.isCircle = true;
+			if (recognizeCircle(bounds, currentLine) == true){
+				isCircle = true;
 				System.out.println("This figure is Cicle\n");
 			}
-			else {
-				System.out.println("This figure is " + getShapeName(this.aShape.size()-1) + "\n");
-			}
-		}
-		else {
-			System.out.println("This figure is " + getShapeName(this.aShape.size()-1) + "\n");
 		}
 		repaint();
 	}
