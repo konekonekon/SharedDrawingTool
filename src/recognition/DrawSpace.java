@@ -16,14 +16,16 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 	private double rayon;
 	private double smallRayon;
 	private double bigRayon;
-	//private boolean reshapeDemande;
+	private boolean isCircle;
+	private ArrayList<ArrayList<Point>> recognizeShapes;
 
 	public DrawSpace() {
 		super();
 		addMouseListener(this);
 		addMouseMotionListener(this);
 		lines = new ArrayList<ArrayList<Point>>();
-		//reshapeDemande = false;
+		isCircle = false;
+		recognizeShapes = new ArrayList<ArrayList<Point>>(); //stock
 	}
 
 	// TODO : color, thickness for line/text
@@ -31,10 +33,10 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D) g;
 		
-		RenderingHints rh = g2.getRenderingHints ();
-	    rh.put (RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+		RenderingHints rh = g2.getRenderingHints();
+	    rh.put(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 	    rh.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-	    g2.setRenderingHints (rh);
+	    g2.setRenderingHints(rh);
 	    
 		g2.setColor(Color.white);
 		g2.fillRect(0, 0, getWidth(), getHeight());
@@ -47,56 +49,35 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 		if (aShape != null) {
 			/*for (Point p : aShape) {
 				this.drawAnchor(p, g2);
-			}*/
+			}*/ //which is better?
 			this.drawAnchor(aShape, g2);
-			//remove line that user drew
-			this.displayShape(aShape, g2);
-			//this.drawCircle(bounds, g2);
+			if (aShape.size() > 2)
+				this.drawTestCircles(this.bounds, g2); //not work
 			
-			/*if (reshapeDemande == true)
-				this.displayShape(aShape, g2);*/
-		}
-	}
-
-	public void displayShape(ArrayList<Point> shapeToDisplay, Graphics2D g2){
-		g2.setColor(Color.RED);
-		g2.setStroke(new BasicStroke(3));
-		Point previous = null;
-		
-		for (Point p : shapeToDisplay){
-			
-			if (previous == null){
-				previous = p;
-				continue;
+			if (this.isCircle == true) {
+				this.displayCircle(this.bounds, g2);
 			}
-			g2.drawLine(p.x, p.y, previous.x, previous.y);
-			/*if (p.distance(startPoint) < 10)
-				g2.drawLine(previous.x, previous.y, startPoint.x, startPoint.y);
-			else
-				g2.drawLine(p.x, p.y, previous.x, previous.y);*/
-			previous = p;
+			else {
+				this.displayShape(aShape, g2);
+			}
+			this.isCircle = false;
 		}
 	}
 	
-	public void drawAnchor(ArrayList<Point> shape, Graphics2D g2){
-		for (Point p : shape){
-			g2.setColor(Color.RED);
-			g2.fillOval(p.x, p.y, 5, 5);
-		}
+	/*** DRAW ELEMENTS SECTION ***/
+	public void displayCircle(Rectangle rectangle, Graphics2D g2d){
+		this.calculateRayon(rectangle);
+		g2d.setColor(Color.RED);
+		g2d.setStroke(new BasicStroke(3));
+		
+		int left = center.x - (int)rayon;
+		int top = center.y - (int)rayon;
+		
+		g2d.drawOval(left, top, (int)rayon*2, (int)rayon*2);
 	}
 	
-	public void calculateRayon(Rectangle rec){
-		int x = rec.x + (rec.width / 2);
-		int y = rec.y + (rec.height / 2);
-		center = new Point(x,y);
-		rayon = ((rec.width / 2) + (rec.height / 2)) / 2;
-		smallRayon = rayon-(rayon*0.1);
-		bigRayon = rayon+(rayon*0.1);
-		//global? create new class Circle?
-	}
-	
-	public void drawCircle(Rectangle rec, Graphics2D g2d){
-		this.calculateRayon(rec);
+	public void drawTestCircles(Rectangle rec, Graphics2D g2d){ //To test
+		this.calculateRayon(rec); //each time call this function?
 		
 		int leftForSmall = center.x - (int)smallRayon;
 		int topForSmall = center.y - (int)smallRayon;
@@ -111,22 +92,80 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 		g2d.drawOval(leftForSmall, topForSmall, (int)smallRayon*2, (int)smallRayon*2);
 		g2d.drawOval(leftForBig, topForBig, (int)bigRayon*2, (int)bigRayon*2);
 	}
+
+	public void displayShape(ArrayList<Point> shapeToDisplay, Graphics2D g2){
+		g2.setColor(Color.RED);
+		g2.setStroke(new BasicStroke(3));
+		Point previous = null;
+		
+		for (Point p : shapeToDisplay){
+			if (previous == null){
+				previous = p;
+				continue;
+			}
+			g2.drawLine(p.x, p.y, previous.x, previous.y);
+			previous = p;
+		}
+	}
+	
+	public void drawAnchor(ArrayList<Point> shape, Graphics2D g2){
+		for (Point p : shape){
+			g2.setColor(Color.RED);
+			g2.fillOval(p.x, p.y, 5, 5);
+		}
+	}
+	
+	public void drawStroke(ArrayList<Point> line, Graphics2D g2) {
+		int i = 0;
+		while (i < line.size() - 1) {
+			Point p0 = line.get(i);
+			Point p1 = line.get(i + 1);
+			g2.drawLine(p0.x, p0.y, p1.x, p1.y);			
+			i++;
+		}
+	}
+	
+	/*** CALCULATE & RECOGNIZE SECTION ***/	
+	public String getShapeName(int numAngle){
+        switch(numAngle){
+        	case 0: return "Point";
+        	case 1: return "Line";
+        	case 2: return "1 angle";
+            case 3: return "Triangle";
+            case 4: return "Rectangle";
+            case 5: return "Pentagon";
+            case 6: return "Hexagon";
+            case 7: return "Heptagon";
+            case 8: return "Octagon";
+            default : return "Unknown";
+        }
+    }
+	
+	public void calculateRayon(Rectangle rec){
+		int x = rec.x + (rec.width / 2);
+		int y = rec.y + (rec.height / 2);
+		center = new Point(x,y);
+		rayon = ((rec.width / 2) + (rec.height / 2)) / 2;
+		System.out.println("Rayon : " + rayon);
+		smallRayon = rayon-(rayon*0.08);
+		bigRayon = rayon+(rayon*0.08);
+		//global? create new class Circle?
+		
+	}
 	
 	public boolean recognizeCircle(Rectangle rec, ArrayList<Point> currentStroke) {
-		/*int x = rec.x + (rec.width / 2);
-		int y = rec.y + (rec.height / 2);
-		Point center = new Point(x,y);
-		double rayon = ((rec.width / 2) + (rec.height / 2)) / 2;*/
 		this.calculateRayon(rec);
 		
-		for (Point p : currentStroke) {
-			if (p.distance(center) < smallRayon){
-				if (p.distance(center) > bigRayon)
-					System.out.println("False");
-					return false;
+		if (currentStroke.size() > 3){
+			for (Point p : currentStroke) {
+				if (p.distance(center) < smallRayon){
+					if (p.distance(center) > bigRayon)
+						System.out.println("false");
+						return false;
+				}
 			}
 		}
-		System.out.println("True");
+		System.out.println("true");
 		return true;
 	}
 	
@@ -145,76 +184,6 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 		//System.out.println(left + " " + top + " " + right + " " + bottom);
 		Rectangle bounds = new Rectangle(left, top, (right - left), (bottom - top));
 		return bounds;
-	}
-	
-	public String getShapeName(int numAngle){
-        switch(numAngle){
-        	case 0: return "Point";
-        	case 1: return "Line";
-        	case 2: return "1 angle";
-            case 3: return "Triangle";
-            case 4: return "Rectangle";
-            case 5: return "Pentagon";
-            case 6: return "Hexagon";
-            case 7: return "Heptagon";
-            case 8: return "Octagon";
-        }
-        return null;
-    }
-	
-	public ArrayList<Point> recognizeShape(ArrayList<Point> line){
-		Point previous = null;
-		Point anchor = null;
-		ArrayList<Point> shape = new ArrayList<Point>();
-		
-		for (Point current : line){
-			if (anchor == null) {
-				anchor = current;
-				shape.add(anchor);
-				continue;
-			}
-			
-			if (previous == null) {
-				previous = current;
-				continue;
-			}
-			
-			if (previous.equals(current))
-				continue;
-			
-			double angle = calculateAngle(anchor, previous, current);
-			
-			if (angle > 30){
-				if (current.distance(anchor)> 25){
-					if (current.distance(previous) > 10) {
-						anchor = previous;
-						shape.add(anchor);					
-						previous = current;
-					}
-				}
-			} else {
-				previous = current;
-			}
-			
-			if (current == line.get(line.size()-1)){
-				anchor = current;
-				shape.add(anchor);
-			}
-		}
-		/* Compare distance between start point and end point.
-		 * if the distance is small, ignore end point, consider end point equal to start point.
-		 */ 
-		if (shape.size() < 3){
-			if (shape.get(0).distance(shape.get(shape.size()-1)) < 5){
-				shape.get(shape.size()-1).setLocation(shape.get(0));
-			}
-		}
-		else{
-			if (shape.get(0).distance(shape.get(shape.size()-1)) < 20){
-				shape.get(shape.size()-1).setLocation(shape.get(0));
-			}
-		}
-		return shape;
 	}
 	
 	public double calculateAngle(Point p0, Point p1, Point p2){
@@ -238,27 +207,65 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 		return delta;
 	}
 	
-	public void drawStroke(ArrayList<Point> line, Graphics2D g2) {
-		int i = 0;
-		while (i < line.size() - 1) {
-			Point p0 = line.get(i);
-			Point p1 = line.get(i + 1);
-			g2.drawLine(p0.x, p0.y, p1.x, p1.y);			
-			i++;
+	public ArrayList<Point> recognizeShape(ArrayList<Point> line){
+		Point previous = null;
+		Point anchor = null;
+		ArrayList<Point> shape = new ArrayList<Point>();
+		
+		for (Point current : line){
+			//Initialization
+			if (anchor == null) {
+				anchor = current;
+				shape.add(anchor);
+				continue;
+			}
+			if (previous == null) {
+				previous = current;
+				continue;
+			}
+			if (previous.equals(current))
+				continue;
+			
+			double angle = calculateAngle(anchor, previous, current);
+			
+			if (angle > 30){
+				if (current.distance(anchor)> 25){
+					if (current.distance(previous) > 10) {
+						anchor = previous;
+						shape.add(anchor);					
+						previous = current;
+					}
+				}
+			} else {
+				previous = current;
+			}
+			//Add last point to shape 
+			if (current == line.get(line.size()-1)){
+				anchor = current;
+				shape.add(anchor);
+			}
 		}
+		/* Compare distance between start point and end point.
+		 * if the distance is small, ignore end point, consider end point equal to start point.
+		 */ 
+		if (shape.size() < 3){ //For small line
+			if (shape.get(0).distance(shape.get(shape.size()-1)) < 5){
+				shape.get(shape.size()-1).setLocation(shape.get(0));
+			}
+		}
+		else{
+			if (shape.get(0).distance(shape.get(shape.size()-1)) < 20){
+				shape.get(shape.size()-1).setLocation(shape.get(0));
+			}
+		}
+		return shape;
 	}
 
-	public void mouseClicked(MouseEvent e) {
-		/*if (e.getClickCount() == 2){
-			currentLine = null;
-			//if (e.getLocationOnScreen())
-			reshapeDemande = true;
-			repaint();
-		}*/
-
-	}
+	/*** MOUSE EVENT SECTION ***/
+	public void mouseClicked(MouseEvent e) {}
 
 	public void mousePressed(MouseEvent e) {
+
 		currentLine = new ArrayList<Point>();
 		lines.add(currentLine);
 		currentLine.add(e.getPoint());
@@ -266,15 +273,28 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 	}
 
 	public void mouseReleased(MouseEvent e) {
-		aShape = this.recognizeShape(currentLine); //aShape is global, why it needs return? 
-		bounds = this.getBounds(aShape);
-		//System.out.println(this.recognizeCircle(bounds, currentLine));
+		this.aShape = this.recognizeShape(currentLine); //aShape is global, why it needs return? 
+		//System.out.println("Shape has " + aShape.size() + " points.");
 		
-		if (this.recognizeCircle(bounds, currentLine) == true)
-			System.out.println("This figure is Cicle\n");
-		else
-			System.out.println("This figure is " + getShapeName(aShape.size()-1) + "\n");
+		if (this.aShape.size() > 2){
+			this.bounds = this.getBounds(this.aShape);
+			System.out.println("Bounds : " + this.bounds);
+		
+			if (this.recognizeCircle(this.bounds, currentLine) == true){
+				this.isCircle = true;
+				System.out.println("This figure is Cicle\n");
+			}
+			else {
+				//this.isCircle = false;
+				System.out.println("This figure is " + getShapeName(this.aShape.size()-1) + "\n");
+			}
+		}
+		else {
+			//this.isCircle = false;
+			System.out.println("This figure is " + getShapeName(this.aShape.size()-1) + "\n");
+		}
 		repaint();
+		//this.isCircle = false;
 	}
 
 	public void mouseDragged(MouseEvent e) {
