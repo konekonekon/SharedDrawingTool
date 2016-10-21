@@ -11,6 +11,11 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 	private ArrayList<Point> currentLine;
 	private ArrayList<ArrayList<Point>> lines;
 	private ArrayList<Point> aShape;
+	private Rectangle bounds;
+	private Point center;
+	private double rayon;
+	private double smallRayon;
+	private double bigRayon;
 	//private boolean reshapeDemande;
 
 	public DrawSpace() {
@@ -40,11 +45,14 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 		}
 		
 		if (aShape != null) {
-			for (Point p : aShape) {
+			/*for (Point p : aShape) {
 				this.drawAnchor(p, g2);
-			}
+			}*/
+			this.drawAnchor(aShape, g2);
 			//remove line that user drew
 			this.displayShape(aShape, g2);
+			//this.drawCircle(bounds, g2);
+			
 			/*if (reshapeDemande == true)
 				this.displayShape(aShape, g2);*/
 		}
@@ -54,6 +62,7 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 		g2.setColor(Color.RED);
 		g2.setStroke(new BasicStroke(3));
 		Point previous = null;
+		
 		for (Point p : shapeToDisplay){
 			
 			if (previous == null){
@@ -69,23 +78,55 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 		}
 	}
 	
-	public void drawAnchor(Point p, Graphics2D g2){
-		g2.setColor(Color.RED);
-		g2.fillOval(p.x, p.y, 5, 5);
+	public void drawAnchor(ArrayList<Point> shape, Graphics2D g2){
+		for (Point p : shape){
+			g2.setColor(Color.RED);
+			g2.fillOval(p.x, p.y, 5, 5);
+		}
 	}
 	
-	public boolean recognizeCircle(Rectangle rec, ArrayList<Point> stroke) {
+	public void calculateRayon(Rectangle rec){
 		int x = rec.x + (rec.width / 2);
 		int y = rec.y + (rec.height / 2);
-		Point center = new Point(x,y);
-		double rayon = ((rec.width / 2) + (rec.height / 2)) / 2;
+		center = new Point(x,y);
+		rayon = ((rec.width / 2) + (rec.height / 2)) / 2;
+		smallRayon = rayon-(rayon*0.1);
+		bigRayon = rayon+(rayon*0.1);
+		//global? create new class Circle?
+	}
+	
+	public void drawCircle(Rectangle rec, Graphics2D g2d){
+		this.calculateRayon(rec);
 		
-		for (Point p : stroke) {
-			if (p.distance(center) < rayon-10){
-				if (p.distance(center) > rayon+10)
+		int leftForSmall = center.x - (int)smallRayon;
+		int topForSmall = center.y - (int)smallRayon;
+		int leftForBig = center.x - (int)bigRayon;
+		int topForBig = center.y - (int)bigRayon;
+
+		g2d.setColor(Color.YELLOW);
+		g2d.setStroke(new BasicStroke(1));
+		//draw center point
+		g2d.fillOval(center.x, center.y, 5, 5);
+		//draw rayons
+		g2d.drawOval(leftForSmall, topForSmall, (int)smallRayon*2, (int)smallRayon*2);
+		g2d.drawOval(leftForBig, topForBig, (int)bigRayon*2, (int)bigRayon*2);
+	}
+	
+	public boolean recognizeCircle(Rectangle rec, ArrayList<Point> currentStroke) {
+		/*int x = rec.x + (rec.width / 2);
+		int y = rec.y + (rec.height / 2);
+		Point center = new Point(x,y);
+		double rayon = ((rec.width / 2) + (rec.height / 2)) / 2;*/
+		this.calculateRayon(rec);
+		
+		for (Point p : currentStroke) {
+			if (p.distance(center) < smallRayon){
+				if (p.distance(center) > bigRayon)
+					System.out.println("False");
 					return false;
 			}
 		}
+		System.out.println("True");
 		return true;
 	}
 	
@@ -101,7 +142,7 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 			right = Math.max(p.x, right);
 			bottom = Math.max(p.y, bottom);
 		}
-		System.out.println(left + " " + top + " " + right + " " + bottom);
+		//System.out.println(left + " " + top + " " + right + " " + bottom);
 		Rectangle bounds = new Rectangle(left, top, (right - left), (bottom - top));
 		return bounds;
 	}
@@ -225,12 +266,14 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 	}
 
 	public void mouseReleased(MouseEvent e) {
-		aShape = this.recognizeShape(currentLine);
-		Rectangle bounds = this.getBounds(aShape);
-		//boolean isCircle = this.recognizeCircle(bounds, currentLine);
-		if (this.recognizeCircle(bounds, currentLine))
-			System.out.println("This figure is Cicle");
-		System.out.println("This figure is " + getShapeName(aShape.size()-1));
+		aShape = this.recognizeShape(currentLine); //aShape is global, why it needs return? 
+		bounds = this.getBounds(aShape);
+		//System.out.println(this.recognizeCircle(bounds, currentLine));
+		
+		if (this.recognizeCircle(bounds, currentLine) == true)
+			System.out.println("This figure is Cicle\n");
+		else
+			System.out.println("This figure is " + getShapeName(aShape.size()-1) + "\n");
 		repaint();
 	}
 
