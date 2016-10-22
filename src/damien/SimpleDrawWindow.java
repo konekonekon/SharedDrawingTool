@@ -110,11 +110,13 @@ public class SimpleDrawWindow extends JFrame implements Performer{
 	@Override
 	public void redo() {
 		status.setText("Redo last line drawing");
+		drawComp.redrawlastline();
 	}
 
 	@Override
 	public void undo() {
 		status.setText("Undoing last line drawing");
+		drawComp.removelastline();
 	}
 
 	@Override
