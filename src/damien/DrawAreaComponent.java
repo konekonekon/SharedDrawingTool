@@ -133,6 +133,12 @@ public class DrawAreaComponent extends JComponent{
 			i++;
 		}
 	}
+	
+	// Note best way to undo / redo
+	// would actually to use the "command pattern"
+	// as in http://www.algosome.com/articles/implementing-undo-redo-java.html
+	// http://www-igm.univ-mlv.fr/~berstel/Cours/CoursJava/7-UndoRedo.pdf
+	
 
 	public void removelastline(){
 		if (lines.size() < 1){
