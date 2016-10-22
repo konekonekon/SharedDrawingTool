@@ -80,9 +80,6 @@ public class DrawAreaComponent extends JComponent{
 
 
 	public void setBufferedImage(String imagePath){
-		
-	//	imagePath = "C:\\Users\\NasVr\\Downloads\\4030433.jpg";
-		
 		try{
 			bufImage = ImageIO.read(new File(imagePath));
 		}
@@ -101,6 +98,10 @@ public class DrawAreaComponent extends JComponent{
 			// TODO: handle exception
 			e.printStackTrace();
 		}
+	}
+
+	public void reset() {
+		clear();
 	}
 
 
