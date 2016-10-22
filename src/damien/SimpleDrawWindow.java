@@ -72,6 +72,7 @@ public class SimpleDrawWindow extends JFrame implements Performer{
 			file = fileChooser.getSelectedFile();
 			status.setText("Imported " + file);
 			String path = file.getAbsolutePath();
+			drawComp.reset();
 			drawComp.setBufferedImage(path);
 			repaint();
 			status.setText("Succesfully imported file: " + path);

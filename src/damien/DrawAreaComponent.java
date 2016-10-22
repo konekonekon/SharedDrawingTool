@@ -74,8 +74,9 @@ public class DrawAreaComponent extends JComponent{
 			g2d = (Graphics2D) bufImage.getGraphics();
 			clear();
 		}
-		
+
 		else{
+			// clear();
 			g2d = (Graphics2D) bufImage.getGraphics();
 			for (ArrayList<Point> line : lines)
 				this.drawStroke(line, g2d);
@@ -86,8 +87,6 @@ public class DrawAreaComponent extends JComponent{
 		rh.put (RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		rh.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setRenderingHints (rh);
-		// clear();
-
 		g.drawImage(bufImage, 0, 0, null);
 	}
 
