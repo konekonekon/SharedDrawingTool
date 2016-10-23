@@ -17,33 +17,17 @@ public class Circle implements Shape {
 		radius = r;
 	}
 	
-/*	@Override
-	public void draw(Rectangle rectangle, Graphics2D g2d){
-		calculateRayon(rectangle);
-		g2d.setColor(Color.RED);
-		g2d.setStroke(new BasicStroke(3));
-		
-		int left = center.x - (int)rayon;
-		int top = center.y - (int)rayon;
-		
-		g2d.drawOval(left, top, (int)rayon*2, (int)rayon*2);
-	}*/
-	
-/*	public void drawTestCircles(Rectangle rec, Graphics2D g2d){ //To test
-		calculateRayon(rec); //each time call this function?
-		
-		int leftForSmall = center.x - (int)smallRayon;
-		int topForSmall = center.y - (int)smallRayon;
-		int leftForBig = center.x - (int)bigRayon;
-		int topForBig = center.y - (int)bigRayon;
+/*	public void drawTestCircles(Graphics2D g2d){	
+		int leftForSmall = center.x - (int)(radius * 0.9);
+		int topForSmall = center.y - (int)(radius * 0.9);
+		int leftForBig = center.x - (int)(radius * 1.1);
+		int topForBig = center.y - (int)(radius * 1.1);
 
 		g2d.setColor(Color.BLUE);
 		g2d.setStroke(new BasicStroke(1));
-		//draw center point
 		g2d.fillOval(center.x-2, center.y-2, 4, 4);
-		//draw rayons	    
-		g2d.drawOval(leftForSmall, topForSmall, (int)smallRayon*2, (int)smallRayon*2);
-		g2d.drawOval(leftForBig, topForBig, (int)bigRayon*2, (int)bigRayon*2);
+		g2d.drawOval(leftForSmall, topForSmall, (int)(radius * 0.9 *2), (int)(radius * 0.9 *2));
+		g2d.drawOval(leftForBig, topForBig, (int)(radius * 1.1 *2), (int)(radius * 1.1 *2));
 	}*/
 	
 
@@ -68,25 +52,10 @@ public class Circle implements Shape {
 		return new Rectangle(left, top, (right - left), (bottom - top));
 	}
 	
-/*	public boolean recognizeCircle(Rectangle rec, ArrayList<Point> currentStroke) {
-		this.calculateRayon(rec);
-		
-		if (currentStroke.size() > 3){
-			for (Point p : currentStroke) {
-				if (p.distance(center) < smallRayon){
-					if (p.distance(center) > bigRayon)
-						System.out.println("false");
-						return false;
-				}
-			}
-		}
-		System.out.println("true");
-		return true;
-	}*/
-	
 	public boolean near(Point p) {
 		double d = p.distance(center);
-		return d > radius * 0.9 && d < radius * 1.1;
+		double diff = radius * 0.2;
+		return d > radius - diff && d < radius + diff;
 	}
 	
 	public boolean allNear(ArrayList<Point> cloudPoints) {
@@ -108,22 +77,21 @@ public class Circle implements Shape {
 		
 		Point center = new Point(x,y);
 		double radius = ((rec.width / 2) + (rec.height / 2)) / 2;
-		Circle estimateCircle = new Circle(center, radius);
+		Circle estimatedCircle = new Circle(center, radius);
 		
-		if (estimateCircle.allNear(line))
-			return estimateCircle;
+		if (estimatedCircle.allNear(line))
+			return estimatedCircle;
 		return null;
 	}
 
 	@Override
 	public void draw(Graphics2D g2) {
-		calculateRayon(rectangle);
-		g2d.setColor(Color.RED);
-		g2d.setStroke(new BasicStroke(3));
+		g2.setColor(Color.RED);
+		g2.setStroke(new BasicStroke(3));
 		
-		int left = center.x - (int)rayon;
-		int top = center.y - (int)rayon;
+		int left = center.x - (int)radius;
+		int top = center.y - (int)radius;
 		
-		g2d.drawOval(left, top, (int)rayon*2, (int)rayon*2);
+		g2.drawOval(left, top, (int)radius*2, (int)radius*2);
 	}
 }

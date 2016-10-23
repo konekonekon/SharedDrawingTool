@@ -13,8 +13,8 @@ public class ShapeRecognizer {
 			return aShape;
 		if ((aShape = Circle.recognize(line)) != null)
 			return aShape;
-		if ((aShape = Polygon.recognize(line)) != null)
-			return aShape;
+		//if ((aShape = Polygon.recognize(line)) != null)
+		//	return aShape;
 
 		return aShape;
 	}

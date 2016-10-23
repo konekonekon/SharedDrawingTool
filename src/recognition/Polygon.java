@@ -7,9 +7,9 @@ import java.awt.Point;
 import java.util.ArrayList;
 
 public class Polygon implements Shape {
-
+	
 	public Polygon(){
-		super();
+		
 	}
 	
 	public void drawAnchor(ArrayList<Point> shape, Graphics2D g2){
