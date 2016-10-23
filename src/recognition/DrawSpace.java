@@ -23,29 +23,29 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D) g;
 
-	    /*** ANTI ALIASING ***/
+	    /* ANTI ALIASING */
 		RenderingHints rh = g2.getRenderingHints ();
 	    rh.put (RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 	    rh.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 	    g2.setRenderingHints (rh);
 	    
-	    /*** Paint background ***/
+	    /* Paint background */
 		g2.setColor(Color.white);
 		g2.fillRect(0, 0, getWidth(), getHeight());
 		
-		/*** Draw lines user drew in black ***/
+		/* Draw lines user drew in black */
 		g2.setColor(Color.black);
-		/*if (currentLine !=  null)
-			drawStroke(currentLine, g2);*/
 		for (ArrayList<Point> line : lines)
 			drawStroke(line, g2);
 		
-		/*** Draw recognized shapes in red ***/
+		/* Draw recognized shapes in red */
+		g2.setColor(Color.RED);
+		g2.setStroke(new BasicStroke(3));
 		for (Shape s : shapes)
 			s.draw(g2);
 	}
 	
-	public void drawStroke(ArrayList<Point> line, Graphics2D g2) {
+	public static void drawStroke(ArrayList<Point> line, Graphics2D g2) {
 		int i = 0;
 		while (i < line.size() - 1) {
 			Point p0 = line.get(i);

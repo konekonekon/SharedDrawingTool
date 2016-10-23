@@ -1,30 +1,22 @@
 package recognition;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.util.ArrayList;
 
-public class Polygon implements Shape {
+public class Polygon extends Shape {
+	ArrayList<Point> anchors;
 	
-	public Polygon(){
-		
+	public Polygon(ArrayList<Point> points){
+		anchors = points;
 	}
 	
-	public void drawAnchor(ArrayList<Point> shape, Graphics2D g2){
-		for (Point p : shape){
-			g2.setColor(Color.RED);
-			g2.fillOval(p.x-3, p.y-3, 6, 6);
-		}
-	}
-	
-	public double calculateAngle(Point p0, Point p1, Point p2){
-		/*** cos Delta = vectorU*vectorV / length(vectorU)*length(vectorV) 
+	public static double calculateAngle(Point p0, Point p1, Point p2){
+		/* cos Delta = vectorU*vectorV / length(vectorU)*length(vectorV) 
 		 * 	 Delta = acos Delta. acos = inverse of cos = cos small(-1)
 		 * 
 		 *   vectorU = p0 to p1 = u, vectorV = p0 to p2 = v
-		 *   length(vectorU) = lengthU, length(vectorV) = lengthV ***/
+		 *   length(vectorU) = lengthU, length(vectorV) = lengthV */
 
 		Point u = new Point((p1.x - p0.x), (p1.y - p0.y));
 		Point v = new Point((p2.x - p1.x), (p2.y - p1.y));
@@ -39,29 +31,14 @@ public class Polygon implements Shape {
 		
 		return delta;
 	}
-	
-	public void displayShape(ArrayList<Point> shapeToDisplay, Graphics2D g2){
-		g2.setColor(Color.RED);
-		g2.setStroke(new BasicStroke(3));
-		Point previous = null;
-		for (Point p : shapeToDisplay){
-			if (previous == null){
-				previous = p;
-				continue;
-			}
-			g2.drawLine(p.x, p.y, previous.x, previous.y);
-			previous = p;
-		}
-	}
-	
-	//return anchors
-	public static ArrayList<Point> recognizePolygon(ArrayList<Point> line){
+
+	public static Shape recognize(ArrayList<Point> line) {
 		Point previous = null;
 		Point anchor = null;
 		ArrayList<Point> shape = new ArrayList<Point>();
 		
 		for (Point current : line){
-			//Initialization
+			/* Initialization */
 			if (anchor == null) {
 				anchor = current;
 				shape.add(anchor);
@@ -76,18 +53,16 @@ public class Polygon implements Shape {
 			
 			double angle = calculateAngle(anchor, previous, current);
 			
-			if (angle > 30){
-				if (current.distance(anchor)> 25){
+			if (angle > 25){
 					if (current.distance(previous) > 10) {
 						anchor = previous;
 						shape.add(anchor);					
 						previous = current;
 					}
-				}
 			} else {
 				previous = current;
 			}
-			//Add last point to shape 
+			/* Add last point to shape */ 
 			if (current == line.get(line.size()-1)){
 				anchor = current;
 				shape.add(anchor);
@@ -106,15 +81,23 @@ public class Polygon implements Shape {
 				shape.get(shape.size()-1).setLocation(shape.get(0));
 			}
 		}
-		return shape;
-	}
-
-	public static Shape recognize(ArrayList<Point> line) {
-		return null;
+		Polygon aPolygon = new Polygon(shape); 
+		return aPolygon;
 	}
 
 	@Override
 	public void draw(Graphics2D g2) {
-		
+		Point previous = null;
+		for (Point p : anchors){
+			/* Draw anchors */
+			g2.fillOval(p.x-3, p.y-3, 6, 6);
+			/* Draw lines between each anchor */
+			if (previous == null){
+				previous = p;
+				continue;
+			}
+			g2.drawLine(p.x, p.y, previous.x, previous.y);
+			previous = p;
+		}
 	}
 }

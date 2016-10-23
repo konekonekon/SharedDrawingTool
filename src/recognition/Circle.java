@@ -1,13 +1,11 @@
 package recognition;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
-public class Circle implements Shape {
+public class Circle extends Shape {
 
 	Point center;
 	double radius;
@@ -31,19 +29,19 @@ public class Circle implements Shape {
 	}*/
 	
 
-	/*** To get each extremity of points ***/
+	/* To get each extremity of points */
 	public static Rectangle getBounds(ArrayList<Point> aLine){
 		boolean first = true;
 		int left = 0, top = 0 , right = 0, bottom = 0;
 		
 		for (Point p : aLine){
-			/*** Initialization ***/
+			/* Initialization */
 			if (first){
 				left = right = p.x;
 				top = bottom = p.y;
 				first = false;
 			}
-			/*** Compare to find extremities ***/
+			/* Compare to find extremities */
 			left = Math.min(p.x, left);
 			top = Math.min(p.y, top);
 			right = Math.max(p.x, right);
@@ -54,12 +52,12 @@ public class Circle implements Shape {
 	
 	public boolean near(Point p) {
 		double d = p.distance(center);
-		double diff = radius * 0.2;
+		double diff = radius * 0.15;
 		return d > radius - diff && d < radius + diff;
 	}
 	
-	public boolean allNear(ArrayList<Point> cloudPoints) {
-		for (Point p : cloudPoints){
+	public boolean allNear(ArrayList<Point> points) {
+		for (Point p : points){
 			if (!near(p))
 				return false;
 		}
@@ -67,7 +65,7 @@ public class Circle implements Shape {
 	}
 	
 	public static Shape recognize(ArrayList<Point> line) {
-		/*** Points number condition ***/
+		/* Points number condition */
 		if (line.size() < 5)
 			return null;
 		
@@ -85,10 +83,7 @@ public class Circle implements Shape {
 	}
 
 	@Override
-	public void draw(Graphics2D g2) {
-		g2.setColor(Color.RED);
-		g2.setStroke(new BasicStroke(3));
-		
+	public void draw(Graphics2D g2) {		
 		int left = center.x - (int)radius;
 		int top = center.y - (int)radius;
 		

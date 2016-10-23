@@ -1,10 +1,14 @@
 package recognition;
 
 import java.awt.Graphics2D;
+import java.awt.Point;
+import java.util.ArrayList;
 
-public interface Shape {
+public abstract class Shape {
 	
-	// public static Shape recognize(ArrayList<Point> line);
-	public void draw(Graphics2D g2);
+	public static Shape recognize(ArrayList<Point> line) {
+		return null;
+	}
 	
+	public void draw(Graphics2D g2) {}	
 }

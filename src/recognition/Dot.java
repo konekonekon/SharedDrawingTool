@@ -1,17 +1,15 @@
 package recognition;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.util.ArrayList;
 
-public class Dot implements Shape {
+public class Dot extends Shape {
 
 	Point p;
 
-	public Dot(Point p){
-		//super();
-		this.p = p;
+	public Dot(Point point){
+		this.p = point;
 	}
 
 	public static Shape recognize(ArrayList<Point> line) {
@@ -25,8 +23,7 @@ public class Dot implements Shape {
 
 	@Override
 	public void draw(Graphics2D g2) {
-		g2.setColor(Color.RED);
-		g2.fillOval(p.x-2, p.y-2, 4, 4);
+		g2.fillOval(p.x-3, p.y-3, 6, 6);
 	}
 
 }
