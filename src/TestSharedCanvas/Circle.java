@@ -1,4 +1,4 @@
-package recognition;
+package TestSharedCanvas;
 
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -84,9 +84,18 @@ public class Circle extends Shape {
 
 	@Override
 	public void draw(Graphics2D g2) {		
-		int left = center.x - (int)radius;
-		int top = center.y - (int)radius;
+		int left = center.x - radius;
+		int top = center.y - radius;
 		
-		g2.drawOval(left, top, (int)radius*2, (int)radius*2);
+		g2.drawOval(left, top, radius*2, radius*2);
+	}
+	
+	@Override
+	public String encode() {
+		return null;
+	}
+	
+	public static Shape decode(String data) {
+		return null;
 	}
 }

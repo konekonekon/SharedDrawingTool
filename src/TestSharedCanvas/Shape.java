@@ -1,4 +1,4 @@
-package recognition;
+package TestSharedCanvas;
 
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -11,5 +11,12 @@ public abstract class Shape {
 	}
 	
 	public void draw(Graphics2D g2) {}
-
+	
+	public String encode() {
+		return null;
+	}
+	
+	public static Shape decode(String data) {
+		return null;
+	}
 }
