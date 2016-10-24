@@ -18,7 +18,7 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 		addMouseMotionListener(this);
 		lines = new ArrayList<ArrayList<Point>>();
 		shapes = new ArrayList<Shape>();
-		drawListeners = new ArrayList<>();
+		drawListeners = new ArrayList<DrawListener>();
 	}
 
 	public void paintComponent(Graphics g) {
@@ -56,11 +56,6 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 			i++;
 		}
 	}
-	
-	public void addShape(Shape s) {
-		shapes.add(s);
-		repaint();
-	}
 
 	public void mouseClicked(MouseEvent e) {}
 
@@ -94,6 +89,11 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 	
 	public void addDrawListener(DrawListener listener) {
 		drawListeners.add(listener);
+	}
+	
+	public void addShape(Shape s) {
+		shapes.add(s);
+		repaint();
 	}
 
 }

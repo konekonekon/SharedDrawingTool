@@ -15,7 +15,7 @@ public class DrawServer {
 	private static HashSet<PrintWriter> writers = new HashSet<PrintWriter>();
 
 	public static void main(String[] args) throws Exception {
-		System.out.println("The chat server is running.");
+		System.out.println("Server is running.");
 		ServerSocket listener = new ServerSocket(PORT);
 		try {
 			while (true) {
@@ -42,8 +42,7 @@ public class DrawServer {
 						socket.getInputStream()));
 				out = new PrintWriter(socket.getOutputStream(), true);
 
-				// Now that a successful name has been chosen, add the
-				// socket's print writer to the set of all writers so
+				// add the socket's print writer to the set of all writers so
 				// this client can receive broadcast messages.
 				writers.add(out);
 
@@ -61,8 +60,7 @@ public class DrawServer {
 			} catch (IOException e) {
 				System.out.println(e);
 			} finally {
-				// Remove its print
-				// writer from the sets, and close its socket.
+				// Remove its print writer from the sets, and close its socket.
 				if (out != null) {
 					writers.remove(out);
 				}

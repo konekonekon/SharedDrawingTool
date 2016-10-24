@@ -40,7 +40,14 @@ public class DrawClient implements DrawListener {
         // Process all messages from server, according to the protocol.
         while (true) {
         	String line = in.readLine();
-        	Shape s = Dot.decode(line);
+        	Shape s = null;
+        	if (line.startsWith("Dot"))
+        		s = Dot.decode(line);
+        	else if (line.startsWith("Circle"))
+        		s = Circle.decode(line);
+        	else if (line.startsWith("Polygon"))
+        		s = Polygon.decode(line);
+        	
         	if (s != null)
         		drawSpace.addShape(s);
         }

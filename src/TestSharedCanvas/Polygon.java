@@ -102,11 +102,22 @@ public class Polygon extends Shape {
 	}
 	
 	@Override
-	public String encode() {
-		return "Polygon " + Integer.toString(p.x) + " " + Integer.toString(p.y);
+	public String encode() {		
+		String aString = "Polygon";
+		for (Point p : anchors)
+			aString += " " + Integer.toString(p.x) + " " + Integer.toString(p.y);
+		return aString;
 	}
 	
 	public static Shape decode(String data) {
-		return null;
+		String[] elements = data.split(" ");
+		Polygon aPolygon = null; 
+		if (elements[0].equals("Polygon")) {
+			ArrayList<Point> points = new ArrayList<Point>();
+			for (int i = 1; i < elements.length; i += 2)
+				points.add(new Point(Integer.parseInt(elements[i]), Integer.parseInt(elements[i+1])));
+			aPolygon = new Polygon(points);
+		}
+		return aPolygon;
 	}
 }
