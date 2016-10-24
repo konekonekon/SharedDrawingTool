@@ -1,5 +1,6 @@
 package TestSharedCanvas;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.io.*;
 import java.net.*;
@@ -9,23 +10,20 @@ public class DrawClient implements DrawListener {
 
     BufferedReader in;
     PrintWriter out;
-    JFrame frame = new JFrame("Shared Drawing Tool");
+    Window window;
+    //JFrame frame = new JFrame("Shared Drawing Tool");
     private DrawSpace drawSpace;
 
     public DrawClient() {
+    	window = new Window();
     	drawSpace = new DrawSpace();
     	drawSpace.addDrawListener(this);
-		frame.setMinimumSize(new Dimension(520,450));
+    	window.setLayout(new BorderLayout());
+    	window.add(drawSpace, BorderLayout.CENTER);
+    	
+		/*frame.setMinimumSize(new Dimension(520,450));
     	frame.getContentPane().add(drawSpace, "Center");
-        frame.pack();        
-    }
-
-    private String getServerAddress() {
-        return JOptionPane.showInputDialog(
-            frame,
-            "Enter IP Address of the Server:",
-            "Welcome to the Shared Drawing Tool",
-            JOptionPane.QUESTION_MESSAGE);
+        frame.pack();  */      
     }
 
     private void run() throws IOException {
@@ -55,8 +53,10 @@ public class DrawClient implements DrawListener {
 
     public static void main(String[] args) throws Exception {
         DrawClient client = new DrawClient();
-        client.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        client.frame.setVisible(true);
+        client.window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        client.window.setVisible(true);
+        /*client.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        client.frame.setVisible(true);*/
         client.run();
     }
     
