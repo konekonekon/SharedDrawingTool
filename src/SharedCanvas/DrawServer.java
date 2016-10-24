@@ -5,7 +5,7 @@ import java.net.*;
 
 public class DrawServer {
 
-	private static final int PORT = 1234;
+	private static final int PORT = 1231;
 	private static ServerSocket serverSocket;
 
 	public static void main(String[] args) throws IOException {

@@ -1,37 +1,4 @@
 package SharedCanvas;
-/*
-import java.awt.*;
-import javax.swing.JFrame;
-
-public class Window extends JFrame {
-	
-	private DrawSpace drawSpace;
-	
-	public Window(){
-		this.setTitle("Shared Drawing Tool");
-		this.setMinimumSize(new Dimension(220,150));
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		int screenWidth = (int)screenSize.getWidth();
-		int screenHeight = (int)screenSize.getHeight();
-		int preferredWidth = (int)(screenWidth *0.6);
-		int preferredHeight = (int)(screenHeight *0.6);
-		this.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
-		int preferredX = (screenWidth - preferredWidth) /2;
-		int preferredY = (screenHeight - preferredHeight) /2;
-		this.setLocation(preferredX, preferredY);
-		this.setMaximizedBounds(new Rectangle(screenWidth, screenHeight));
-		this.setResizable(true);
-		this.setLayout(new BorderLayout());
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-		drawSpace = new DrawSpace();
-		//drawSpace.addDrawListener(this);
-		this.add(drawSpace, BorderLayout.CENTER);
-
-		this.pack();
-		this.setVisible(true);
-	}
-}*/
 
 import java.awt.*;
 import java.io.File;
@@ -74,14 +41,19 @@ public class Window extends JFrame implements Performer {
 
 		this.setJMenuBar(menu);
 		this.add(status, BorderLayout.SOUTH);
-		//this.add(drawSpace, BorderLayout.CENTER);
+		this.add(drawSpace, BorderLayout.CENTER);
 
 		this.pack();
 		this.setVisible(true);
 	}
+	
+	public DrawSpace getDrawSpace(){
+		return this.drawSpace;
+	}
 
 	@Override
 	public void newFile() {
+		status.setText("New file opened");
 		drawSpace.clear();
 	}
 
@@ -102,7 +74,7 @@ public class Window extends JFrame implements Performer {
 			status.setText("Imported " + file);
 			String path = file.getAbsolutePath();
 			//??
-			drawSpace.reset();
+			drawSpace.clear();
 			drawSpace.setBufferedImage(path);
 			repaint();
 			status.setText("Succesfully imported file: " + path);
@@ -113,7 +85,7 @@ public class Window extends JFrame implements Performer {
 	public void saveFile() {
 		status.setText("Save function selected");
 
-		FileNameExtensionFilter filter = new FileNameExtensionFilter(
+		/*FileNameExtensionFilter filter = new FileNameExtensionFilter(
 				"Images", "jpg", "jpeg", "png", "gif", "JPG", "JPEG", "PNG", "GIF");
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.addChoosableFileFilter(filter);
@@ -128,28 +100,29 @@ public class Window extends JFrame implements Performer {
 			drawSpace.saveBufferedImage(path);
 			repaint();
 			status.setText("Succesfully saved file: " + path);
-		}
+		}*/
 		//	drawComp.saveBufferedImage());
 	}
 	@Override
 	public void quit() {
 		status.setText("Exiting, bye!");
-		this.dispose(); //?
+		System.exit(0);
 	}
 	@Override
 	public void redo() {
-		status.setText("Redo last line drawing");
-		drawSpace.redrawlastline();
+		status.setText("Redo last shape");
+		drawSpace.redoLastShape();
 	}
 	@Override
 	public void undo() {
-		status.setText("Undoing last line drawing");
-		drawSpace.removelastline();
+		status.setText("Undo last shape");
+		
+		drawSpace.undoLastShape();
 	}
 	@Override
 	public void reset() {
 		status.setText("Resetting draw area");
-		drawSpace.reset(); //clear?
+		drawSpace.clear();
 	}
 }
 

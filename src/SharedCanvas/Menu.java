@@ -46,6 +46,7 @@ public class Menu extends JMenuBar implements ActionListener {
 		editMenu.add(undo);
 		reset = new JMenuItem("Reset");
 		reset.addActionListener(this);
+		editMenu.add(reset);
 	}
 
 	@Override
