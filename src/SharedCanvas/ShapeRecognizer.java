@@ -1,4 +1,4 @@
-package TestSharedCanvas;
+package SharedCanvas;
 
 import java.awt.Point;
 import java.util.ArrayList;

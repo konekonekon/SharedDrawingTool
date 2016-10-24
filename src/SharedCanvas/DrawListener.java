@@ -1,4 +1,4 @@
-package TestSharedCanvas;
+package SharedCanvas;
 
 public interface DrawListener {
 	

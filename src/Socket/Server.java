@@ -18,7 +18,7 @@ public class Server  {
 			//Thread server = new Server(port);
 			while(true){
 				//new Threads(serverSocket.accept()).start();
-				new Threads(serverSocket).start();
+				new Handler(serverSocket).start();
 				//server.start();
 			}
 		} catch (IOException e) {

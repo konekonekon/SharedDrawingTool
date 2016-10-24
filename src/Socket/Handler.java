@@ -3,7 +3,7 @@ import java.io.*;
 import java.net.*;
 
 
-public class Threads extends Thread {
+public class Handler extends Thread {
 	
 	private Socket socket;
 	private DataInputStream in;
@@ -13,7 +13,7 @@ public class Threads extends Thread {
 /*	public Threads(Socket s) {
 		this.socket = s;
 	}*/
-	public Threads(ServerSocket ss) throws IOException{
+	public Handler(ServerSocket ss) throws IOException{
 		ss.setSoTimeout(10000);
 		this.socket = ss.accept();
 	}

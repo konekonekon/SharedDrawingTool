@@ -1,16 +1,24 @@
-package TestSharedCanvas;
+package SharedCanvas;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.*;
+import java.io.*;
 import java.util.*;
+import javax.imageio.*;
 import javax.swing.*;
 
 public class DrawSpace extends JComponent implements MouseListener, MouseMotionListener {
+
+	private BufferedImage bufImage;
+	// private Image img;
+	private Graphics2D g2d;
 
 	private ArrayList<Point> currentLine;
 	private ArrayList<ArrayList<Point>> lines;
 	private ArrayList<Shape> shapes;
 	private ArrayList<DrawListener> drawListeners;
+	private ArrayList<ArrayList<Point>> prev_lines;
 
 	public DrawSpace() {
 		super();
@@ -19,11 +27,18 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 		lines = new ArrayList<ArrayList<Point>>();
 		shapes = new ArrayList<Shape>();
 		drawListeners = new ArrayList<DrawListener>();
+		prev_lines = new ArrayList<ArrayList<Point>>();
 	}
 
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D) g;
+		
+		/*if (bufImage == null){
+			bufImage = new BufferedImage(getSize().width, getSize().height, BufferedImage.TYPE_INT_RGB);
+			g2d = (Graphics2D) bufImage.getGraphics();
+			clear();
+		}*/
 
 	    /* ANTI ALIASING */
 		RenderingHints rh = g2.getRenderingHints ();
@@ -95,5 +110,56 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 		shapes.add(s);
 		repaint();
 	}
+	
+	public void clear(){
+		g2d.setPaint(Color.WHITE);
+		g2d.fillRect(0, 0, getSize().width, getSize().height);
+		g2d.setColor(Color.RED);
+		repaint();
+	}
 
+	public void setBufferedImage(String imagePath){
+		try{
+			bufImage = ImageIO.read(new File(imagePath));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void saveBufferedImage(String imagePath){
+		try{
+			File outfile = new File(imagePath);
+			ImageIO.write(bufImage, "PNG", outfile);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void reset() {
+		clear();
+	}
+	
+	public void removelastline(){
+		if (lines.size() < 1)
+			System.out.println("No line to remove");
+		else {
+			prev_lines.add(lines.get(lines.size() - 1));
+			System.out.println("prev_line.size(): " + prev_lines.size());
+			lines.remove(lines.size() - 1);
+			System.out.println("lines.size(): " + lines.size());
+		}
+		// revalidate();
+		repaint();
+	}
+
+	public void redrawlastline(){
+		if (prev_lines.size() < 1)
+			System.out.println("No drawing to undo");
+		else {
+			lines.add(prev_lines.get(prev_lines.size() - 1));
+			prev_lines.remove(prev_lines.size() - 1);
+		}
+		// revalidate();
+		repaint();
+	}
 }

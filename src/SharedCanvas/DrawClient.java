@@ -1,39 +1,36 @@
-package TestSharedCanvas;
+package SharedCanvas;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.io.*;
 import java.net.*;
-import javax.swing.*;
 
 public class DrawClient implements DrawListener {
-
+	private static final int PORT = 1234;
+	private String serverAddress = "localhost";
     BufferedReader in;
     PrintWriter out;
     Window window;
-    //JFrame frame = new JFrame("Shared Drawing Tool");
     private DrawSpace drawSpace;
 
     public DrawClient() {
-    	window = new Window();
     	drawSpace = new DrawSpace();
     	drawSpace.addDrawListener(this);
+    	window = new Window();
     	window.setLayout(new BorderLayout());
     	window.add(drawSpace, BorderLayout.CENTER);
-    	
-		/*frame.setMinimumSize(new Dimension(520,450));
-    	frame.getContentPane().add(drawSpace, "Center");
-        frame.pack();  */      
+    	window.pack();
+    	window.setVisible(true);
     }
 
     private void run() throws IOException {
 
         // Make connection and initialize streams
         //String serverAddress = getServerAddress();
-        Socket socket = new Socket("localhost", 9000);
+        Socket socket = new Socket(serverAddress, PORT);
         in = new BufferedReader(new InputStreamReader(
             socket.getInputStream()));
         out = new PrintWriter(socket.getOutputStream(), true);
+        //out.println("This message is from " + socket.getLocalSocketAddress());
 
         // Process all messages from server, according to the protocol.
         while (true) {
@@ -53,10 +50,6 @@ public class DrawClient implements DrawListener {
 
     public static void main(String[] args) throws Exception {
         DrawClient client = new DrawClient();
-        client.window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        client.window.setVisible(true);
-        /*client.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        client.frame.setVisible(true);*/
         client.run();
     }
     
