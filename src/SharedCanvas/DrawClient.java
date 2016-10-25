@@ -1,6 +1,5 @@
 package SharedCanvas;
 
-import java.awt.BorderLayout;
 import java.io.*;
 import java.net.*;
 
@@ -28,6 +27,8 @@ public class DrawClient implements DrawListener {
         while (true) {
         	String line = in.readLine();
         	Shape s = null;
+        	
+        	/* Drawing */
         	if (line.startsWith("Dot"))
         		s = Dot.decode(line);
         	else if (line.startsWith("Circle"))
@@ -37,17 +38,47 @@ public class DrawClient implements DrawListener {
         	/* Add this shape to shapes list to draw */
         	if (s != null)
         		window.getDrawSpace().addShape(s);
+
+        	/* Undo */
+        	
+        	if (line.startsWith("Undo"))
+        		window.getDrawSpace().undoLastShape();
+        	/*if (line.startsWith("DotUndo"))
+        		s = Dot.decodeUndo(line);
+        	else if (line.startsWith("CircleUndo"))
+        		s = Circle.decodeUndo(line);
+        	else if (line.startsWith("PolygonUndo"))
+        		s = Polygon.decodeUndo(line);
+        	 Add this shape to shapes list to draw 
+        	if (s != null)
+        		window.getDrawSpace().undoLastShape();*/
+        	
         }
     }
-
-    public static void main(String[] args) throws Exception {
-        DrawClient client = new DrawClient();
-        client.run();
-    }
+    
     /* When DrawSpace has action = new shape, 
      * it encode to string, and send to Socket. */
 	@Override
 	public void shapeDrawn(Shape s) {
 		out.println(s.encode());
 	}
+	//how to distingish each case?
+	@Override
+	public void shapeUndo() {
+		out.println("Undo");
+		//out.println(s.encodeUndo());
+	}
+
+	@Override
+	public void shapeRedo() {
+		out.println("Redo");
+		//out.println(s.encodeRedo());
+	}
+
+    public static void main(String[] args) throws Exception {
+        DrawClient client = new DrawClient();
+        client.run();
+    }
+    
+    
 }

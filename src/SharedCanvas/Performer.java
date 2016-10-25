@@ -14,6 +14,4 @@ public interface Performer {
 
 	public void undo();
 
-	public void reset();
-
 }

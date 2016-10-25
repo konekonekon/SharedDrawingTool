@@ -9,7 +9,7 @@ import javax.swing.JMenuItem;
 public class Menu extends JMenuBar implements ActionListener {
 
 	private JMenu fileMenu, editMenu;
-	private JMenuItem newFile, importFile, saveFile, quit, redo, undo, reset;
+	private JMenuItem newFile, importFile, saveFile, quit, redo, undo;
 	private Performer performer;
 
 	public  Menu(Performer performer) {
@@ -44,9 +44,6 @@ public class Menu extends JMenuBar implements ActionListener {
 		undo = new JMenuItem("Undo");
 		undo.addActionListener(this);
 		editMenu.add(undo);
-		reset = new JMenuItem("Reset");
-		reset.addActionListener(this);
-		editMenu.add(reset);
 	}
 
 	@Override
@@ -68,9 +65,6 @@ public class Menu extends JMenuBar implements ActionListener {
 		}
 		if (e.getSource() == this.undo){
 			this.performer.undo();
-		}
-		if (e.getSource() == this.reset){
-			this.performer.reset();
 		}
 	}
 }

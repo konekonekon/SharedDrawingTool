@@ -60,11 +60,6 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 		g2.setStroke(new BasicStroke(3));
 		for (Shape s : shapes)
 			s.draw(g2);
-		/*for (int i = 0; i < shapes.size(); i++) {
-			shapes.get(i).draw(g2);
-			if (shapes.get(i) != shapes.get(i+1))
-				i += 1;	
-		}*/
 	}
 	
 	public static void drawStroke(ArrayList<Point> line, Graphics2D g2) {
@@ -89,8 +84,6 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 	public void mouseReleased(MouseEvent e) {
 		Shape aShape = ShapeRecognizer.recognize(currentLine);
 		if (aShape != null) {
-			shapes.add(aShape);
-			repaint();
 			for (DrawListener l : drawListeners)
 				l.shapeDrawn(aShape);
 		}
@@ -139,15 +132,11 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 			e.printStackTrace();
 		}
 	}
-	
+	//plus de condition !!
 	public void undoLastShape(){
 		if (shapes != null) {
-			System.out.println("prevShapes.size(): " + prevShapes.size());
-			System.out.println("shapes.size(): " + shapes.size());
 			prevShapes.add(shapes.get(shapes.size() - 1));
-			shapes.remove(shapes.get(shapes.size() - 1));
-			System.out.println("prevShapes.size(): " + prevShapes.size());
-			System.out.println("shapes.size(): " + shapes.size());
+			shapes.remove(shapes.size() - 1);
 		}
 		repaint();
 	}
@@ -155,9 +144,20 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 	public void redoLastShape(){
 		if (prevShapes != null) {
 			shapes.add(prevShapes.get(prevShapes.size() - 1));
-			prevShapes.remove(prevShapes.get(prevShapes.size() - 1));
+			prevShapes.remove(prevShapes.size() - 1);
 		}
 		repaint();
 	}
-
+	
+	public void undoEvent() {
+		for (DrawListener l : drawListeners)
+			l.shapeUndo();
+			//l.shapeUndo(shapes.get(shapes.size() - 1));
+	}
+	
+	public void redoEvent() {
+		for (DrawListener l : drawListeners)
+			l.shapeRedo();
+			//l.shapeRedo(shapes.get(shapes.size() - 1));
+	}
 }

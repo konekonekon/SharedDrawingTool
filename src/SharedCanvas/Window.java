@@ -73,10 +73,9 @@ public class Window extends JFrame implements Performer {
 			file = fileChooser.getSelectedFile();
 			status.setText("Imported " + file);
 			String path = file.getAbsolutePath();
-			//??
+			
 			drawSpace.clear();
 			drawSpace.setBufferedImage(path);
-			repaint();
 			status.setText("Succesfully imported file: " + path);
 		}
 	}
@@ -109,20 +108,17 @@ public class Window extends JFrame implements Performer {
 		System.exit(0);
 	}
 	@Override
-	public void redo() {
-		status.setText("Redo last shape");
-		drawSpace.redoLastShape();
-	}
-	@Override
 	public void undo() {
 		status.setText("Undo last shape");
-		
-		drawSpace.undoLastShape();
+		drawSpace.undoEvent();
+		//drawSpace.undoLastShape();
 	}
 	@Override
-	public void reset() {
-		status.setText("Resetting draw area");
-		drawSpace.clear();
+	public void redo() {
+		status.setText("Redo last shape");
+		drawSpace.redoEvent();
+		//drawSpace.redoLastShape();
 	}
+	
 }
 
