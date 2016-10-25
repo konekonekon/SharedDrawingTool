@@ -4,8 +4,8 @@ import java.io.*;
 import java.net.*;
 
 public class DrawClient implements DrawListener {
-	private static final int PORT = 1231;
-	private String serverAddress = "localhost";
+	private static final int PORT = 1233;
+	private String serverAddress = "192.168.55.1";
     BufferedReader in;
     PrintWriter out;
     Window window;
@@ -38,21 +38,18 @@ public class DrawClient implements DrawListener {
         	/* Add this shape to shapes list to draw */
         	if (s != null)
         		window.getDrawSpace().addShape(s);
+        	
+        	/* NewFile */
+        	if (line.startsWith("NewFile"))
+        		window.getDrawSpace().clear();
 
         	/* Undo */
-        	
         	if (line.startsWith("Undo"))
         		window.getDrawSpace().undoLastShape();
-        	/*if (line.startsWith("DotUndo"))
-        		s = Dot.decodeUndo(line);
-        	else if (line.startsWith("CircleUndo"))
-        		s = Circle.decodeUndo(line);
-        	else if (line.startsWith("PolygonUndo"))
-        		s = Polygon.decodeUndo(line);
-        	 Add this shape to shapes list to draw 
-        	if (s != null)
-        		window.getDrawSpace().undoLastShape();*/
         	
+        	/* Redo */
+        	if (line.startsWith("Redo"))
+        		window.getDrawSpace().redoLastShape();
         }
     }
     
@@ -62,23 +59,25 @@ public class DrawClient implements DrawListener {
 	public void shapeDrawn(Shape s) {
 		out.println(s.encode());
 	}
-	//how to distingish each case?
+
 	@Override
 	public void shapeUndo() {
 		out.println("Undo");
-		//out.println(s.encodeUndo());
 	}
 
 	@Override
 	public void shapeRedo() {
 		out.println("Redo");
-		//out.println(s.encodeRedo());
 	}
-
+	
+	@Override
+	public void newFileCreated() {
+		out.println("NewFile");
+	}
     public static void main(String[] args) throws Exception {
         DrawClient client = new DrawClient();
         client.run();
     }
-    
-    
+
+	
 }

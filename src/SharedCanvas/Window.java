@@ -5,7 +5,6 @@ import java.io.File;
 import javax.swing.*;
 import javax.swing.filechooser.*;
 
-//@SuppressWarnings("serial")
 public class Window extends JFrame implements Performer {
 
 	private Menu menu;
@@ -54,7 +53,8 @@ public class Window extends JFrame implements Performer {
 	@Override
 	public void newFile() {
 		status.setText("New file opened");
-		drawSpace.clear();
+		drawSpace.newFileEvent();
+		//drawSpace.clear();
 	}
 
 	@Override
@@ -111,13 +111,11 @@ public class Window extends JFrame implements Performer {
 	public void undo() {
 		status.setText("Undo last shape");
 		drawSpace.undoEvent();
-		//drawSpace.undoLastShape();
 	}
 	@Override
 	public void redo() {
 		status.setText("Redo last shape");
 		drawSpace.redoEvent();
-		//drawSpace.redoLastShape();
 	}
 	
 }

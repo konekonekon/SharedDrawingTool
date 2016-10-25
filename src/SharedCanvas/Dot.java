@@ -40,28 +40,4 @@ public class Dot extends Shape {
 		}
 		return aDot;
 	}
-	
-	/*@Override
-	public String encodeUndo() {
-		return "DotUndo " + Integer.toString(p.x) + " " + Integer.toString(p.y);
-	}
-	
-	public static Shape decodeUndo(String data) {
-		String[] elements = data.split(" ");
-		Dot aDot = null; 
-		if (elements[0].equals("DotUndo")) {
-			Point p = new Point(Integer.parseInt(elements[1]), Integer.parseInt(elements[2]));
-			aDot = new Dot(p);
-		}
-		return aDot;
-	}
-	
-	@Override
-	public String encodeRedo() {
-		return null;
-	}
-	
-	public static Shape decodeRedo(String data) {
-		return null;
-	}*/
 }

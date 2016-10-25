@@ -120,22 +120,4 @@ public class Polygon extends Shape {
 		}
 		return aPolygon;
 	}
-	
-	/*@Override
-	public String encodeUndo() {
-		return null;
-	}
-	
-	public static Shape decodeUndo(String data) {
-		return null;
-	}
-	
-	@Override
-	public String encodeRedo() {
-		return null;
-	}
-	
-	public static Shape decodeRedo(String data) {
-		return null;
-	}*/
 }

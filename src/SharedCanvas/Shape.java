@@ -19,20 +19,4 @@ public abstract class Shape {
 	public static Shape decode(String data) {
 		return null;
 	}
-	
-	/*public String encodeUndo() {
-		return null;
-	}
-	
-	public static Shape decodeUndo(String data) {
-		return null;
-	}
-	
-	public String encodeRedo() {
-		return null;
-	}
-	
-	public static Shape decodeRedo(String data) {
-		return null;
-	}*/
 }

@@ -105,22 +105,4 @@ public class Circle extends Shape {
 		}
 		return aCircle;
 	}
-	
-	/*@Override
-	public String encodeUndo() {
-		return null;
-	}
-	
-	public static Shape decodeUndo(String data) {
-		return null;
-	}
-	
-	@Override
-	public String encodeRedo() {
-		return null;
-	}
-	
-	public static Shape decodeRedo(String data) {
-		return null;
-	}*/
 }

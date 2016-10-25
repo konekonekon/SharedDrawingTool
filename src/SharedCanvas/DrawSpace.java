@@ -109,7 +109,7 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 		repaint();
 	}
 	
-	public void clear(){
+	public void clear() {
 		lines.clear();
 		shapes.clear();
 		prevShapes.clear();
@@ -132,7 +132,7 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 			e.printStackTrace();
 		}
 	}
-	//plus de condition !!
+
 	public void undoLastShape(){
 		if (shapes != null) {
 			prevShapes.add(shapes.get(shapes.size() - 1));
@@ -142,6 +142,9 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 	}
 
 	public void redoLastShape(){
+		//more conditions, undo -> add shapes -> redo : should be nothing happened.
+		//int i = shapes.size();
+		
 		if (prevShapes != null) {
 			shapes.add(prevShapes.get(prevShapes.size() - 1));
 			prevShapes.remove(prevShapes.size() - 1);
@@ -149,15 +152,18 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 		repaint();
 	}
 	
+	public void newFileEvent() {
+		for (DrawListener l : drawListeners)
+			l.newFileCreated();
+	}
+	
 	public void undoEvent() {
 		for (DrawListener l : drawListeners)
 			l.shapeUndo();
-			//l.shapeUndo(shapes.get(shapes.size() - 1));
 	}
 	
 	public void redoEvent() {
 		for (DrawListener l : drawListeners)
 			l.shapeRedo();
-			//l.shapeRedo(shapes.get(shapes.size() - 1));
 	}
 }
