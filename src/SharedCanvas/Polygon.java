@@ -77,7 +77,7 @@ public class Polygon extends Shape {
 			}
 		}
 		else{
-			if (shape.get(0).distance(shape.get(shape.size()-1)) < 20){
+			if (shape.get(0).distance(shape.get(shape.size()-1)) < 30){
 				shape.get(shape.size()-1).setLocation(shape.get(0));
 			}
 		}
@@ -111,13 +111,11 @@ public class Polygon extends Shape {
 	
 	public static Shape decode(String data) {
 		String[] elements = data.split(" ");
-		Polygon aPolygon = null; 
-		if (elements[0].equals("Polygon")) {
-			ArrayList<Point> points = new ArrayList<Point>();
-			for (int i = 1; i < elements.length; i += 2)
-				points.add(new Point(Integer.parseInt(elements[i]), Integer.parseInt(elements[i+1])));
-			aPolygon = new Polygon(points);
-		}
+		Polygon aPolygon = null;
+		ArrayList<Point> points = new ArrayList<Point>();
+		for (int i = 1; i < elements.length; i += 2)
+			points.add(new Point(Integer.parseInt(elements[i]), Integer.parseInt(elements[i+1])));
+		aPolygon = new Polygon(points);
 		return aPolygon;
 	}
 }

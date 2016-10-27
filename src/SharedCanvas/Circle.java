@@ -98,11 +98,9 @@ public class Circle extends Shape {
 	public static Shape decode(String data) {
 		String[] elements = data.split(" ");
 		Circle aCircle = null; 
-		if (elements[0].equals("Circle")) {
-			Point p = new Point(Integer.parseInt(elements[1]), Integer.parseInt(elements[2]));
-			int r = Integer.parseInt(elements[3]);
-			aCircle = new Circle(p, r);
-		}
+		Point p = new Point(Integer.parseInt(elements[1]), Integer.parseInt(elements[2]));
+		int r = Integer.parseInt(elements[3]);
+		aCircle = new Circle(p, r);
 		return aCircle;
 	}
 }

@@ -4,7 +4,7 @@ import java.io.*;
 import java.net.*;
 
 public class DrawClient implements DrawListener {
-	private static final int PORT = 1234;
+	private static final int PORT = 1231;
 	private String serverAddress = "localhost"; //"192.168.55.1";
     BufferedReader in;
     PrintWriter out;
@@ -53,7 +53,7 @@ public class DrawClient implements DrawListener {
         }
     }
     
-    /* When DrawSpace has action = new shape, 
+    /* When DrawSpace has action,
      * it encode to string, and send to Socket. */
 	@Override
 	public void shapeDrawn(Shape s) {

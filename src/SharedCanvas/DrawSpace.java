@@ -15,7 +15,6 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 	private Graphics2D g2d;
 
 	private ArrayList<Point> currentLine;
-	private ArrayList<ArrayList<Point>> lines;
 	private ArrayList<Shape> shapes;
 	private ArrayList<DrawListener> drawListeners;
 	private ArrayList<Shape> prevShapes;
@@ -24,7 +23,6 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 		super();
 		addMouseListener(this);
 		addMouseMotionListener(this);
-		lines = new ArrayList<ArrayList<Point>>();
 		shapes = new ArrayList<Shape>();
 		drawListeners = new ArrayList<DrawListener>();
 		prevShapes = new ArrayList<Shape>();
@@ -50,10 +48,10 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 		g2.setColor(Color.white);
 		g2.fillRect(0, 0, getWidth(), getHeight());
 		
-		/* Draw lines user drew in black */
+		/* Draw current line user draw in black */
 		g2.setColor(Color.black);
-		for (ArrayList<Point> line : lines)
-			drawStroke(line, g2);
+		if (currentLine != null)
+			drawStroke(currentLine, g2);
 		
 		/* Draw recognized shapes in red */
 		g2.setColor(Color.RED);
@@ -76,7 +74,6 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 
 	public void mousePressed(MouseEvent e) {
 		currentLine = new ArrayList<Point>();
-		lines.add(currentLine);
 		currentLine.add(e.getPoint());
 		repaint();
 	}
@@ -110,7 +107,7 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 	}
 	
 	public void clear() {
-		lines.clear();
+		currentLine.clear();
 		shapes.clear();
 		prevShapes.clear();
 		repaint();

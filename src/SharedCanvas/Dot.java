@@ -33,11 +33,9 @@ public class Dot extends Shape {
 	
 	public static Shape decode(String data) {
 		String[] elements = data.split(" ");
-		Dot aDot = null; 
-		if (elements[0].equals("Dot")) {
-			Point p = new Point(Integer.parseInt(elements[1]), Integer.parseInt(elements[2]));
-			aDot = new Dot(p);
-		}
+		Dot aDot = null;
+		Point p = new Point(Integer.parseInt(elements[1]), Integer.parseInt(elements[2]));
+		aDot = new Dot(p);
 		return aDot;
 	}
 }

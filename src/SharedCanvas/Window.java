@@ -19,7 +19,7 @@ public class Window extends JFrame implements Performer {
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		int screenWidth = (int)screenSize.getWidth();
 		int screenHeight = (int)screenSize.getHeight();
-		int preferredWidth = (int)(screenWidth *0.6);
+		int preferredWidth = (int)(screenWidth *0.4);
 		int preferredHeight = (int)(screenHeight *0.6);
 		this.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
 		int preferredX = (screenWidth - preferredWidth) /2;
@@ -54,7 +54,6 @@ public class Window extends JFrame implements Performer {
 	public void newFile() {
 		status.setText("New file opened");
 		drawSpace.newFileEvent();
-		//drawSpace.clear();
 	}
 
 	@Override
