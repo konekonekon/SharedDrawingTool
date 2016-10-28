@@ -32,11 +32,21 @@ public class Window extends JFrame implements Performer {
 		drawSpace = new DrawSpace();
 		//	drawComp.setBufferedImage("C:\\Users\\NasVr\\Downloads\\4030433.jpg");
 		menu = new Menu(this);
-		status = new JLabel();
+		status = new JLabel("Waiting");
 
-		/*JButton buttonSave = new JButton("Save");
-		 content.add(buttonSave, BorderLayout.NORTH);
-		 buttonSave.addActionListener(e -> drawComp.saveBufferedImage("C:\\Users\\NasVr\\Downloads\\a.png"));*/
+		JPanel panel = new JPanel();
+		FlowLayout panelFlowLayout = new FlowLayout();
+		panel.setLayout(panelFlowLayout);
+		
+		
+		JButton buttonBlue = new JButton("Blue");
+		panel.add(buttonBlue);
+        buttonBlue.addActionListener(e -> drawSpace.setColor(Color.BLUE));
+		
+        this.add(panel, BorderLayout.NORTH);
+        JButton buttonRed = new JButton("Red");
+        panel.add(buttonRed);
+		 buttonRed.addActionListener(e -> drawSpace.setColor(Color.RED));
 
 		this.setJMenuBar(menu);
 		this.add(status, BorderLayout.SOUTH);
@@ -60,6 +70,8 @@ public class Window extends JFrame implements Performer {
 	public void importFile() {
 		status.setText("Import function selected");
 
+		/*
+		 * NOT WORKING !
 		FileNameExtensionFilter filter = new FileNameExtensionFilter(
 				"Images", "jpg", "jpeg", "png", "gif", "JPG", "JPEG", "PNG", "GIF");
 		JFileChooser fileChooser = new JFileChooser();
@@ -77,13 +89,16 @@ public class Window extends JFrame implements Performer {
 			drawSpace.setBufferedImage(path);
 			status.setText("Succesfully imported file: " + path);
 		}
+		*/
 	}
 
 	@Override
 	public void saveFile() {
 		status.setText("Save function selected");
 
-		/*FileNameExtensionFilter filter = new FileNameExtensionFilter(
+		/*
+		 * NOT WORKING !
+		FileNameExtensionFilter filter = new FileNameExtensionFilter(
 				"Images", "jpg", "jpeg", "png", "gif", "JPG", "JPEG", "PNG", "GIF");
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.addChoosableFileFilter(filter);
@@ -115,6 +130,11 @@ public class Window extends JFrame implements Performer {
 	public void redo() {
 		status.setText("Redo last shape");
 		drawSpace.redoEvent();
+	}
+	@Override
+	public void setColor(Color color){
+        drawSpace.setColor(color);
+        drawSpace.repaint();
 	}
 	
 }
