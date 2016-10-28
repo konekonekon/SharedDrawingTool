@@ -1,5 +1,7 @@
 package SharedCanvas;
 
+import java.awt.*;
+
 public interface Performer {
 
 	public void newFile();
@@ -13,5 +15,7 @@ public interface Performer {
 	public void redo();
 
 	public void undo();
+	
+	public void setColor(Color color);
 
 }
