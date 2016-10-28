@@ -75,7 +75,8 @@ public class Window extends JFrame implements Performer {
 	}
 
 	private void setTickValue(int value) {
-		System.out.println("Value changed " + "new value : " + value);
+		// System.out.println("Value changed " + "new value : " + value);
+		// drawSpace.setTrickness(value); // NOT WORKING!
 	}
 
 	public DrawSpace getDrawSpace(){

@@ -199,4 +199,9 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
         color = newColor;
         repaint();
    }
+   
+   public void setTrickness(int trickness){
+        g2d.setStroke(new BasicStroke(trickness));
+        repaint();
+   }
 }
