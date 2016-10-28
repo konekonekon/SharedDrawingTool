@@ -131,23 +131,46 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 	}
 
 	public void undoLastShape(){
-		if (shapes != null) {
+		// System.out.println(shapes.size());
+		if (shapes.size() >= 1) {
 			prevShapes.add(shapes.get(shapes.size() - 1));
 			shapes.remove(shapes.size() - 1);
+		}
+		else
+		{
+		System.out.println("Nothing to undo");
 		}
 		repaint();
 	}
 
 	public void redoLastShape(){
-		//more conditions, undo -> add shapes -> redo : should be nothing happened.
-		//int i = shapes.size();
-		
-		if (prevShapes != null) {
+		// System.out.println(prevShapes.size());
+		if (prevShapes.size() >= 1) {
 			shapes.add(prevShapes.get(prevShapes.size() - 1));
 			prevShapes.remove(prevShapes.size() - 1);
 		}
+		else
+		{
+		System.out.println("Nothing to redo");
+		}
 		repaint();
 	}
+	
+	// Only allow redo if last action was undo
+		public void redoLastShape_Ayano(){
+		// System.out.println(prevShapes.size());
+		if (prevShapes.size() >= 1){
+		// && (prevShapes.get(prevShapes.size() - 1) == shapes.get(shapes.get(shapes.size() - 1)))) {
+			shapes.add(prevShapes.get(prevShapes.size() - 1));
+			prevShapes.remove(prevShapes.size() - 1);
+		}
+		else
+		{
+		System.out.println("Cannot redo, last action was not undo");
+		}
+		repaint();
+	}
+	
 	
 	public void newFileEvent() {
 		for (DrawListener l : drawListeners)
