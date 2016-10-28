@@ -143,6 +143,7 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 		repaint();
 	}
 
+	/*
 	public void redoLastShape(){
 		// System.out.println(prevShapes.size());
 		if (prevShapes.size() >= 1) {
@@ -155,15 +156,17 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 		}
 		repaint();
 	}
+	*/
 	
 	// Only allow redo if last action was undo
-		public void redoLastShape_Ayano(){
+		public void redoLastShape(){
 		// System.out.println(prevShapes.size());
 		if (prevShapes.size() >= 1){
-		// && (prevShapes.get(prevShapes.size() - 1) == shapes.get(shapes.get(shapes.size() - 1)))) {
+            if (Arrays.equals(prevShapes.get(prevShapes.size() - 1), shapes.get(shapes.size() - 1))){
 			shapes.add(prevShapes.get(prevShapes.size() - 1));
 			prevShapes.remove(prevShapes.size() - 1);
-		}
+            }
+        }
 		else
 		{
 		System.out.println("Cannot redo, last action was not undo");
