@@ -3,6 +3,7 @@ package SharedCanvas;
 import java.awt.*;
 import java.io.File;
 import javax.swing.*;
+import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.*;
 
 public class Window extends JFrame implements Performer {
@@ -28,15 +29,42 @@ public class Window extends JFrame implements Performer {
 		this.setMaximizedBounds(new Rectangle(screenWidth, screenHeight));
 		this.setLayout(new BorderLayout());
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
+
 		drawSpace = new DrawSpace();
 		//	drawComp.setBufferedImage("C:\\Users\\NasVr\\Downloads\\4030433.jpg");
 		menu = new Menu(this);
-		status = new JLabel();
+		status = new JLabel("Waiting");
 
-		/*JButton buttonSave = new JButton("Save");
-		 content.add(buttonSave, BorderLayout.NORTH);
-		 buttonSave.addActionListener(e -> drawComp.saveBufferedImage("C:\\Users\\NasVr\\Downloads\\a.png"));*/
+		JPanel panel = new JPanel();
+		FlowLayout panelFlowLayout = new FlowLayout();
+		panel.setLayout(panelFlowLayout);
+		this.add(panel, BorderLayout.NORTH);
+
+
+		JButton buttonBlue = new JButton("Blue");
+		panel.add(buttonBlue);
+		buttonBlue.addActionListener(e -> drawSpace.setColor(Color.BLUE));
+
+
+		JButton buttonRed = new JButton("Red");
+		panel.add(buttonRed);
+		buttonRed.addActionListener(e -> drawSpace.setColor(Color.RED));
+
+		JButton buttonColor = new JButton("Choose Color");
+		panel.add(buttonColor);
+		buttonColor.addActionListener(e -> showColor());
+
+
+		int THICKMIN = 1;
+		int THICKMAX = 10;
+
+		JSlider thickSlider = new JSlider(JSlider.HORIZONTAL, THICKMIN, THICKMAX, 1);
+		thickSlider.setMajorTickSpacing(2);
+		thickSlider.setMinorTickSpacing(1);
+		thickSlider.setPaintTicks(true);
+		thickSlider.setPaintLabels(true);
+		thickSlider.addChangeListener(e -> setTickValue(thickSlider.getValue()));
+		panel.add(thickSlider);
 
 		this.setJMenuBar(menu);
 		this.add(status, BorderLayout.SOUTH);
@@ -45,7 +73,12 @@ public class Window extends JFrame implements Performer {
 		this.pack();
 		this.setVisible(true);
 	}
-	
+
+	private void setTickValue(int value) {
+		// System.out.println("Value changed " + "new value : " + value);
+		// drawSpace.setTrickness(value); // NOT WORKING!
+	}
+
 	public DrawSpace getDrawSpace(){
 		return this.drawSpace;
 	}
@@ -60,6 +93,8 @@ public class Window extends JFrame implements Performer {
 	public void importFile() {
 		status.setText("Import function selected");
 
+		/*
+		 * NOT WORKING !
 		FileNameExtensionFilter filter = new FileNameExtensionFilter(
 				"Images", "jpg", "jpeg", "png", "gif", "JPG", "JPEG", "PNG", "GIF");
 		JFileChooser fileChooser = new JFileChooser();
@@ -72,18 +107,21 @@ public class Window extends JFrame implements Performer {
 			file = fileChooser.getSelectedFile();
 			status.setText("Imported " + file);
 			String path = file.getAbsolutePath();
-			
+
 			drawSpace.clear();
 			drawSpace.setBufferedImage(path);
 			status.setText("Succesfully imported file: " + path);
 		}
+		 */
 	}
 
 	@Override
 	public void saveFile() {
 		status.setText("Save function selected");
 
-		/*FileNameExtensionFilter filter = new FileNameExtensionFilter(
+		/*
+		 * NOT WORKING !
+		FileNameExtensionFilter filter = new FileNameExtensionFilter(
 				"Images", "jpg", "jpeg", "png", "gif", "JPG", "JPEG", "PNG", "GIF");
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.addChoosableFileFilter(filter);
@@ -116,6 +154,20 @@ public class Window extends JFrame implements Performer {
 		status.setText("Redo last shape");
 		drawSpace.redoEvent();
 	}
-	
+	@Override
+	public void setColor(Color color){
+		drawSpace.setColor(color);
+		drawSpace.repaint();
+	}
+
+
+	public void showColor(){
+		System.out.println("Show Color Dialog dialog");
+		Color color;
+		JColorChooser colorChooser = new JColorChooser();
+		color = colorChooser.showDialog(this, "Choose Color", Color.WHITE);
+		drawSpace.setColor(color);
+		drawSpace.repaint();
+	}
 }
 
