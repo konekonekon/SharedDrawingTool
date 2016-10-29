@@ -10,6 +10,7 @@ import javax.swing.*;
 
 public class DrawSpace extends JComponent implements MouseListener, MouseMotionListener {
 
+	private static final long serialVersionUID = -7109290034266072605L;
 	private BufferedImage bufImage;
 	// private Image img;
 	private Graphics2D g2d;
@@ -18,6 +19,8 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 	private ArrayList<Shape> shapes;
 	private ArrayList<DrawListener> drawListeners;
 	private ArrayList<Shape> prevShapes;
+	//private int numShapeElement;
+	private boolean lastActionUndo;
 
 	public DrawSpace() {
 		super();
@@ -26,6 +29,8 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 		shapes = new ArrayList<Shape>();
 		drawListeners = new ArrayList<DrawListener>();
 		prevShapes = new ArrayList<Shape>();
+		//numShapeElement = 0;
+		lastActionUndo = false;
 	}
 
 	public void paintComponent(Graphics g) {
@@ -84,6 +89,7 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 			for (DrawListener l : drawListeners)
 				l.shapeDrawn(aShape);
 		}
+		currentLine.clear();
 	}
 
 	public void mouseDragged(MouseEvent e) {
@@ -129,22 +135,42 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 			e.printStackTrace();
 		}
 	}
-
-	public void undoLastShape(){
-		if (shapes != null) {
+	
+	public void undoLastShape() {
+		// System.out.println(shapes.size());
+		if (shapes.size() >= 1) {
 			prevShapes.add(shapes.get(shapes.size() - 1));
 			shapes.remove(shapes.size() - 1);
+			//numShapeElement = shapes.size();
+			lastActionUndo = true;
+		} else {
+			System.out.println("Nothing to undo");
 		}
 		repaint();
 	}
-
-	public void redoLastShape(){
-		//more conditions, undo -> add shapes -> redo : should be nothing happened.
-		//int i = shapes.size();
-		
-		if (prevShapes != null) {
+	
+	/*public void redoLastShape() {
+		// System.out.println(prevShapes.size());
+		if (prevShapes.size() >= 1) {
 			shapes.add(prevShapes.get(prevShapes.size() - 1));
 			prevShapes.remove(prevShapes.size() - 1);
+		} else {
+			System.out.println("Nothing to redo");
+		}
+		repaint();
+	}*/
+	
+	public void redoLastShape(){
+		// System.out.println(prevShapes.size());
+		if (prevShapes.size() >= 1 && lastActionUndo){
+			//if(numShapeElement == shapes.size()) {
+				shapes.add(prevShapes.get(prevShapes.size() - 1));
+				prevShapes.remove(prevShapes.size() - 1);
+            //}
+        }
+		else{
+			
+			System.out.println("Cannot redo, last action was not undo");
 		}
 		repaint();
 	}

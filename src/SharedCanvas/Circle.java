@@ -10,7 +10,7 @@ public class Circle extends Shape {
 	Point center;
 	int radius;
 	
-	public Circle(Point p, int r){
+	public Circle(Point p, int r) {
 		center = p;
 		radius = r;
 	}
@@ -30,13 +30,13 @@ public class Circle extends Shape {
 	
 
 	/* To get each extremity of points */
-	public static Rectangle getBounds(ArrayList<Point> aLine){
+	public static Rectangle getBounds(ArrayList<Point> aLine) {
 		boolean first = true;
 		int left = 0, top = 0 , right = 0, bottom = 0;
 		
-		for (Point p : aLine){
+		for(Point p : aLine) {
 			/* Initialization */
-			if (first){
+			if(first) {
 				left = right = p.x;
 				top = bottom = p.y;
 				first = false;
@@ -57,7 +57,7 @@ public class Circle extends Shape {
 	}
 	
 	public boolean allNear(ArrayList<Point> points) {
-		for (Point p : points){
+		for(Point p : points) {
 			if (!near(p))
 				return false;
 		}

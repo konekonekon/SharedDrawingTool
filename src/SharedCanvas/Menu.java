@@ -8,6 +8,7 @@ import javax.swing.JMenuItem;
 
 public class Menu extends JMenuBar implements ActionListener {
 
+	private static final long serialVersionUID = 8192450392020603398L;
 	private JMenu fileMenu, editMenu;
 	private JMenuItem newFile, importFile, saveFile, quit, redo, undo;
 	private Performer performer;

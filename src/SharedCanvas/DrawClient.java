@@ -4,7 +4,7 @@ import java.io.*;
 import java.net.*;
 
 public class DrawClient implements DrawListener {
-	private static final int PORT = 1231;
+	private static final int PORT = 1232;
 	private String serverAddress = "localhost"; //"192.168.55.1";
     BufferedReader in;
     PrintWriter out;
