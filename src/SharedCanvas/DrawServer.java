@@ -5,7 +5,7 @@ import java.net.*;
 
 public class DrawServer {
 
-	private static final int PORT = 1232;
+	private static final int PORT = 1231;
 	private static ServerSocket serverSocket;
 
 	public static void main(String[] args) throws IOException {
@@ -17,7 +17,7 @@ public class DrawServer {
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
-		}  finally {
+		} finally {
 			serverSocket.close();
 		}
 	}

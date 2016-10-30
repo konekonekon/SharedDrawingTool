@@ -10,10 +10,10 @@ public class Menu extends JMenuBar implements ActionListener {
 
 	private static final long serialVersionUID = 8192450392020603398L;
 	private JMenu fileMenu, editMenu;
-	private JMenuItem newFile, importFile, saveFile, quit, redo, undo;
+	private JMenuItem newFile, quit, redo, undo;
 	private Performer performer;
 
-	public  Menu(Performer performer) {
+	public Menu(Performer performer) {
 		this.performer = performer;
 
 		// File Menu
@@ -24,20 +24,14 @@ public class Menu extends JMenuBar implements ActionListener {
 		newFile = new JMenuItem("New");
 		newFile.addActionListener(this);
 		fileMenu.add(newFile);
-		importFile = new JMenuItem("Import");
-		importFile.addActionListener(this);
-		fileMenu.add(importFile);
-		saveFile = new JMenuItem("Save");
-		saveFile.addActionListener(this);
-		fileMenu.add(saveFile);
 		quit = new JMenuItem("Quit");
 		quit.addActionListener(this);
 		fileMenu.add(quit);
-		
+
 		// Edit Menu
 		editMenu = new JMenu("Edit");
 		this.add(editMenu);
-		
+
 		// Edit menuItems
 		redo = new JMenuItem("Redo");
 		redo.addActionListener(this);
@@ -47,24 +41,19 @@ public class Menu extends JMenuBar implements ActionListener {
 		editMenu.add(undo);
 	}
 
+	/* Call performer section in Window class */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == this.newFile){
+		if (e.getSource() == this.newFile) {
 			this.performer.newFile();
 		}
-		if (e.getSource() == this.importFile){
-			this.performer.importFile();
-		}
-		if (e.getSource() == this.saveFile){
-			this.performer.saveFile();
-		}
-		if (e.getSource() == this.quit){
+		if (e.getSource() == this.quit) {
 			this.performer.quit();
 		}
-		if (e.getSource() == this.redo){
+		if (e.getSource() == this.redo) {
 			this.performer.redo();
 		}
-		if (e.getSource() == this.undo){
+		if (e.getSource() == this.undo) {
 			this.performer.undo();
 		}
 	}

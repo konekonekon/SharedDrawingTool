@@ -1,50 +1,33 @@
 package SharedCanvas;
-
 import java.awt.*;
-import java.io.File;
 import javax.swing.*;
-import javax.swing.event.ChangeListener;
-import javax.swing.filechooser.*;
 
 public class Window extends JFrame implements Performer {
 
+	private static final long serialVersionUID = 1L;
 	private Menu menu;
 	private DrawSpace drawSpace;
-	private Dimension minSize = new Dimension(250, 200);
 	private JLabel status;
-	private File file;
 
 	public Window(){
 		this.setTitle("Shared Drawing & Recognition App");
-		this.setMinimumSize(minSize);
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		int screenWidth = (int)screenSize.getWidth();
-		int screenHeight = (int)screenSize.getHeight();
-		int preferredWidth = (int)(screenWidth *0.4);
-		int preferredHeight = (int)(screenHeight *0.6);
-		this.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
-		int preferredX = (screenWidth - preferredWidth) /2;
-		int preferredY = (screenHeight - preferredHeight) /2;
-		this.setLocation(preferredX, preferredY);
-		this.setMaximizedBounds(new Rectangle(screenWidth, screenHeight));
+		this.setMinimumSize(new Dimension(250, 200));
+		this.setPreferredSize(new Dimension(600, 700));
 		this.setLayout(new BorderLayout());
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		drawSpace = new DrawSpace();
-		//	drawComp.setBufferedImage("C:\\Users\\NasVr\\Downloads\\4030433.jpg");
 		menu = new Menu(this);
-		status = new JLabel("Waiting");
+		status = new JLabel();
 
 		JPanel panel = new JPanel();
 		FlowLayout panelFlowLayout = new FlowLayout();
 		panel.setLayout(panelFlowLayout);
 		this.add(panel, BorderLayout.NORTH);
 
-
 		JButton buttonBlue = new JButton("Blue");
 		panel.add(buttonBlue);
 		buttonBlue.addActionListener(e -> drawSpace.setColor(Color.BLUE));
-
 
 		JButton buttonRed = new JButton("Red");
 		panel.add(buttonRed);
@@ -54,8 +37,7 @@ public class Window extends JFrame implements Performer {
 		panel.add(buttonColor);
 		buttonColor.addActionListener(e -> showColor());
 
-
-		int THICKMIN = 1;
+		/*int THICKMIN = 1;
 		int THICKMAX = 10;
 
 		JSlider thickSlider = new JSlider(JSlider.HORIZONTAL, THICKMIN, THICKMAX, 1);
@@ -64,7 +46,7 @@ public class Window extends JFrame implements Performer {
 		thickSlider.setPaintTicks(true);
 		thickSlider.setPaintLabels(true);
 		thickSlider.addChangeListener(e -> setTickValue(thickSlider.getValue()));
-		panel.add(thickSlider);
+		panel.add(thickSlider);*/
 
 		this.setJMenuBar(menu);
 		this.add(status, BorderLayout.SOUTH);
@@ -72,11 +54,6 @@ public class Window extends JFrame implements Performer {
 
 		this.pack();
 		this.setVisible(true);
-	}
-
-	private void setTickValue(int value) {
-		// System.out.println("Value changed " + "new value : " + value);
-		// drawSpace.setTrickness(value); // NOT WORKING!
 	}
 
 	public DrawSpace getDrawSpace(){
@@ -88,57 +65,7 @@ public class Window extends JFrame implements Performer {
 		status.setText("New file opened");
 		drawSpace.newFileEvent();
 	}
-
-	@Override
-	public void importFile() {
-		status.setText("Import function selected");
-
-		/*
-		 * NOT WORKING !
-		FileNameExtensionFilter filter = new FileNameExtensionFilter(
-				"Images", "jpg", "jpeg", "png", "gif", "JPG", "JPEG", "PNG", "GIF");
-		JFileChooser fileChooser = new JFileChooser();
-		fileChooser.addChoosableFileFilter(filter);
-		fileChooser.setMultiSelectionEnabled(true);
-		fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
-		Component parent = null;
-		int returnVal = fileChooser.showDialog(parent, "Choose a file");
-		if(returnVal == JFileChooser.APPROVE_OPTION){
-			file = fileChooser.getSelectedFile();
-			status.setText("Imported " + file);
-			String path = file.getAbsolutePath();
-
-			drawSpace.clear();
-			drawSpace.setBufferedImage(path);
-			status.setText("Succesfully imported file: " + path);
-		}
-		 */
-	}
-
-	@Override
-	public void saveFile() {
-		status.setText("Save function selected");
-
-		/*
-		 * NOT WORKING !
-		FileNameExtensionFilter filter = new FileNameExtensionFilter(
-				"Images", "jpg", "jpeg", "png", "gif", "JPG", "JPEG", "PNG", "GIF");
-		JFileChooser fileChooser = new JFileChooser();
-		fileChooser.addChoosableFileFilter(filter);
-		fileChooser.setMultiSelectionEnabled(true);
-		fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
-		Component parent = null;
-		int returnVal = fileChooser.showDialog(parent, "Choose a file");
-		if(returnVal == JFileChooser.APPROVE_OPTION){
-			file = fileChooser.getSelectedFile();
-			status.setText("Imported " + file);
-			String path = file.getAbsolutePath();
-			drawSpace.saveBufferedImage(path);
-			repaint();
-			status.setText("Succesfully saved file: " + path);
-		}*/
-		//	drawComp.saveBufferedImage());
-	}
+	
 	@Override
 	public void quit() {
 		status.setText("Exiting, bye!");
@@ -160,7 +87,7 @@ public class Window extends JFrame implements Performer {
 		drawSpace.repaint();
 	}
 
-
+	@SuppressWarnings("static-access")
 	public void showColor(){
 		System.out.println("Show Color Dialog dialog");
 		Color color;

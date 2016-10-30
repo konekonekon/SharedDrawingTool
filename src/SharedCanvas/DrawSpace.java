@@ -1,26 +1,18 @@
 package SharedCanvas;
-
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.*;
-import java.io.*;
 import java.util.*;
-import javax.imageio.*;
 import javax.swing.*;
 
 public class DrawSpace extends JComponent implements MouseListener, MouseMotionListener {
 
 	private static final long serialVersionUID = -7109290034266072605L;
-	private BufferedImage bufImage;
-	// private Image img;
 	private Graphics2D g2d;
 
 	private ArrayList<Point> currentLine;
 	private ArrayList<Shape> shapes;
 	private ArrayList<DrawListener> drawListeners;
 	private ArrayList<Shape> prevShapes;
-	//private int numShapeElement;
-	private boolean lastActionUndo;
 	private Color color;
 
 	public DrawSpace() {
@@ -30,21 +22,11 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 		shapes = new ArrayList<Shape>();
 		drawListeners = new ArrayList<DrawListener>();
 		prevShapes = new ArrayList<Shape>();
-		//numShapeElement = 0;
-		lastActionUndo = false;
 	}
 
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D) g;
-		
-		// color = Color.RED;
-		
-		/*if (bufImage == null){
-			bufImage = new BufferedImage(getSize().width, getSize().height, BufferedImage.TYPE_INT_RGB);
-			g2d = (Graphics2D) bufImage.getGraphics();
-			clear();
-		}*/
 
 	    /* ANTI ALIASING */
 		RenderingHints rh = g2.getRenderingHints ();
@@ -122,40 +104,17 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 		repaint();
 	}
 
-	// NOT WORKING!
-	public void setBufferedImage(String imagePath){
-		try{
-			bufImage = ImageIO.read(new File(imagePath));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	// NOT WORKING!
-	public void saveBufferedImage(String imagePath){
-		try{
-			File outfile = new File(imagePath);
-			ImageIO.write(bufImage, "PNG", outfile);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
 	public void undoLastShape(){
-		// System.out.println(shapes.size());
 		if (shapes.size() >= 1) {
 			prevShapes.add(shapes.get(shapes.size() - 1));
 			shapes.remove(shapes.size() - 1);
-			//numShapeElement = shapes.size();
-			lastActionUndo = true;
 		} else {
 			System.out.println("Nothing to undo");
 		}
 		repaint();
 	}
 	
-	/*public void redoLastShape() {
-		// System.out.println(prevShapes.size());
+	public void redoLastShape() {
 		if (prevShapes.size() >= 1) {
 			shapes.add(prevShapes.get(prevShapes.size() - 1));
 			prevShapes.remove(prevShapes.size() - 1);
@@ -163,52 +122,7 @@ public class DrawSpace extends JComponent implements MouseListener, MouseMotionL
 			System.out.println("Nothing to redo");
 		}
 		repaint();
-	}*/
-	
-	public void redoLastShape(){
-		// System.out.println(prevShapes.size());
-		if (prevShapes.size() >= 1 && lastActionUndo){
-			//if(numShapeElement == shapes.size()) {
-				shapes.add(prevShapes.get(prevShapes.size() - 1));
-				prevShapes.remove(prevShapes.size() - 1);
-            //}
-        }
-		else{
-			
-			System.out.println("Cannot redo, last action was not undo");
-		}
-	}
-	
-/*	public void redoLastShape(){
-		// System.out.println(prevShapes.size());
-		if (prevShapes.size() >= 1) {
-			shapes.add(prevShapes.get(prevShapes.size() - 1));
-			prevShapes.remove(prevShapes.size() - 1);
-		}
-		else
-		{
-		System.out.println("Nothing to redo");
-		}
-		repaint();
-	}*/
-	
-	
-	/*
-	// Only allow redo if last action was undo
-		public void redoLastShape(){
-		// System.out.println(prevShapes.size());
-		if (prevShapes.size() == 1){
-			shapes.add(prevShapes.get(prevShapes.size() - 1));
-			prevShapes.remove(prevShapes.size() - 1);
-            }
-		else
-		{
-		System.out.println("Cannot redo, last action was not undo");
-		}
-		repaint();
-	}
-	*/
-	
+	}	
 	
 	public void newFileEvent() {
 		for (DrawListener l : drawListeners)
