@@ -1,4 +1,5 @@
 package SharedCanvas;
+
 import java.awt.*;
 import javax.swing.*;
 
@@ -38,6 +39,7 @@ public class Window extends JFrame implements Performer {
 		panel.add(buttonColor);
 		buttonColor.addActionListener(e -> showColor());
 
+		/* Add elements to window */
 		this.setJMenuBar(menu);
 		this.add(status, BorderLayout.SOUTH);
 		this.add(drawSpace, BorderLayout.CENTER);
@@ -46,7 +48,7 @@ public class Window extends JFrame implements Performer {
 		this.setVisible(true);
 	}
 
-	public DrawSpace getDrawSpace(){
+	public DrawSpace getDrawSpace() {
 		return this.drawSpace;
 	}
 
@@ -55,30 +57,33 @@ public class Window extends JFrame implements Performer {
 		status.setText("New file opened");
 		drawSpace.newFileEvent();
 	}
-	
+
 	@Override
 	public void quit() {
 		status.setText("Exiting, bye!");
 		System.exit(0);
 	}
+
 	@Override
 	public void undo() {
 		status.setText("Undo last shape");
 		drawSpace.undoEvent();
 	}
+
 	@Override
 	public void redo() {
 		status.setText("Redo last shape");
 		drawSpace.redoEvent();
 	}
+
 	@Override
-	public void setColor(Color color){
+	public void setColor(Color color) {
 		drawSpace.setColor(color);
 		drawSpace.repaint();
 	}
 
 	@SuppressWarnings("static-access")
-	public void showColor(){
+	public void showColor() {
 		System.out.println("Show Color Dialog dialog");
 		Color color;
 		JColorChooser colorChooser = new JColorChooser();
