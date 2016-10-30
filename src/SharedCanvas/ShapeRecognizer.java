@@ -1,10 +1,11 @@
 package SharedCanvas;
+
 import java.awt.Point;
 import java.util.ArrayList;
 
 public class ShapeRecognizer {
-	
-	public static Shape recognize(ArrayList<Point> line){
+
+	public static Shape recognize(ArrayList<Point> line) {
 		Shape aShape = null;
 
 		if ((aShape = Dot.recognize(line)) != null)

@@ -19,7 +19,8 @@ public class Window extends JFrame implements Performer {
 		drawSpace = new DrawSpace();
 		menu = new Menu(this);
 		status = new JLabel();
-
+		
+		/* For color option */
 		JPanel panel = new JPanel();
 		FlowLayout panelFlowLayout = new FlowLayout();
 		panel.setLayout(panelFlowLayout);
@@ -36,17 +37,6 @@ public class Window extends JFrame implements Performer {
 		JButton buttonColor = new JButton("Choose Color");
 		panel.add(buttonColor);
 		buttonColor.addActionListener(e -> showColor());
-
-		/*int THICKMIN = 1;
-		int THICKMAX = 10;
-
-		JSlider thickSlider = new JSlider(JSlider.HORIZONTAL, THICKMIN, THICKMAX, 1);
-		thickSlider.setMajorTickSpacing(2);
-		thickSlider.setMinorTickSpacing(1);
-		thickSlider.setPaintTicks(true);
-		thickSlider.setPaintLabels(true);
-		thickSlider.addChangeListener(e -> setTickValue(thickSlider.getValue()));
-		panel.add(thickSlider);*/
 
 		this.setJMenuBar(menu);
 		this.add(status, BorderLayout.SOUTH);
@@ -97,4 +87,3 @@ public class Window extends JFrame implements Performer {
 		drawSpace.repaint();
 	}
 }
-
